@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <main id="app"></main>
+    <script type="module">
+        import createApp from './lib/createApp.js';
+        const Com = Vue.extend({
+            name: 'color',
+            props: {
+                color: {
+                    type: String,
+                    default: '#5c3'
+                }
+            },
+            data() {
+                return { currentColor: this.color };
+            },
+            template: `<h1 :style="{color: currentColor}">我是组件</h1>`,
+            methods: {
+                toggle() {
+                    this.currentColor = this.color === this.currentColor ? '#f19' : this.color;
+                }
+            }
+        });
+
+
+        // const app = createApp(Vue, Com, {
+        //     props: { color: '#ac3' },
+        //     attrs: {
+        //         align: 'center'
+        //     },
+        //     nativeOn: {
+        //         click: function () {
+        //             alert(56789)
+        //         }
+        //     }
+        // })
+
+
+
+        // console.log(app)
+
+        // setTimeout(()=>{
+        //     app.$destroy();
+        // }, 500)
+
+        // setInterval(()=>{
+        //     app.toggle();
+        // }, 300)
+
+
+        // createApp(Vue, 'h1', {
+        //     attrs: {
+        //         align: 'center',
+        //     },
+        //     on: {
+        //         click: function () {
+        //             alert(76)
+        //         }
+        //     },
+        //     domProps: {
+        //         innerHTML: '我是h1'
+        //     },
+        // }, { isAppend: false })
+
+
+        const vm = new Vue({
+            el: '#app',
+
+            components: { Com },
+
+            data() {
+                return { msg: '我是独立的vue实例', fontSize: '36px' }
+            },
+
+            template: `<div :style="{fontSize}" @click="call">{{msg}}T</div>`,
+
+            methods: {
+                call() {
+                    alert(321)
+                },
+                destroy() {
+                    this.$destroy();
+                }
+            },
+
+            destroyed() {
+                // alert('des')
+            },
+        });
+        // vm.$off()
+        vm.$destroy();
+        console.log(vm)
+    </script>
+</body>
+
+</html>
