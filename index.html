@@ -7,82 +7,83 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="vue.js"></script>
+    <script src="./dist/vue-create-root.umd.js"></script>
+
 </head>
 
 <body>
     <main id="app"></main>
-    <script type="module">
-        import createApp from './lib/createApp.js';
+    <script>
+        Vue.use(VueCreateRoot.install);
+
         const Com = Vue.extend({
-            name: 'color',
+            name: 'Color',
             props: {
                 color: {
                     type: String,
-                    default: '#5c3'
+                    default: '#96c'
                 }
             },
             data() {
-                return { currentColor: this.color };
+                return {
+                    fontSize: '36px'
+                };
             },
-            template: `<h1 :style="{color: currentColor}">我是组件</h1>`,
+            template: `<h1 :style="{color, fontSize}" @click="toggle">我是组件</h1>`,
             methods: {
                 toggle() {
-                    this.currentColor = this.color === this.currentColor ? '#f19' : this.color;
+                    this.fontSize = '36px' === this.fontSize ? '26px' : '36px';
+                    this.$emit('toggle', this.fontSize);
                 }
             }
         });
 
-
-        // const app = createApp(Vue, Com, {
-        //     props: { color: '#ac3' },
-        //     attrs: {
-        //         align: 'center'
-        //     },
-        //     nativeOn: {
-        //         click: function () {
-        //             alert(56789)
-        //         }
-        //     }
-        // })
-
-
-
-        // console.log(app)
-
-        // setTimeout(()=>{
-        //     app.$destroy();
-        // }, 500)
-
-        // setInterval(()=>{
-        //     app.toggle();
-        // }, 300)
-
-
-        // createApp(Vue, 'h1', {
-        //     attrs: {
-        //         align: 'center',
-        //     },
-        //     on: {
-        //         click: function () {
-        //             alert(76)
-        //         }
-        //     },
-        //     domProps: {
-        //         innerHTML: '我是h1'
-        //     },
-        // }, { isAppend: false })
-
-
         const vm = new Vue({
             el: '#app',
 
-            components: { Com },
+            components: {
+                Com
+            },
 
             data() {
-                return { msg: '我是独立的vue实例', fontSize: '36px' }
+                return {
+                    msg: '我是独立的vue实例',
+                    fontSize: '36px'
+                }
             },
 
             template: `<div :style="{fontSize}" @click="call">{{msg}}T</div>`,
+
+            mounted() {
+
+                // setTimeout(()=>{}, 1000)
+                const app = this.$createRoot(Com, {
+                    as: '$abc',
+                    props: {
+                        color: '#f90'
+                    },
+                    attrs: {
+                        align: 'center'
+                    },
+
+                    on: {
+                        toggle() {
+
+                        }
+                    },
+
+                    nativeOn: {
+                        click: function() {
+                            alert(56789)
+                        }
+                    }
+                })
+                // app.$updateProps({
+                //     color: '#fc0'
+                // });
+
+                // this.$abc();
+            },
 
             methods: {
                 call() {
@@ -97,9 +98,6 @@
                 // alert('des')
             },
         });
-        // vm.$off()
-        vm.$destroy();
-        console.log(vm)
     </script>
 </body>
 

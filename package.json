@@ -1,10 +1,21 @@
 {
-  "name": "vue-other",
-  "version": "1.0.0",
+  "name": "vue-create-root",
+  "version": "0.0.1",
   "description": "做一些通常UI组件库不包含的vue小工具",
-  "main": "index.js",
+  "unpkg": "dist/vue-create-root.umd.js",
+  "jsdelivr": "dist/vue-create-root.umd.js",
+  "main": "dist/vue-create-root.common.js",
+  "module": "dist/vue-create-root.es.js",
+  "browser": "dist/vue-create-root.umd.js",
+  "types": "lib/main.d.ts",
+  "files": [
+    "src",
+    "lib",
+    "dist"
+  ],
   "scripts": {
-    "dev": "npx tsc -w",
+    "dev": "rollup -c --watch",
+    "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +29,18 @@
     "url": "https://github.com/383514580/vue-other/issues"
   },
   "homepage": "https://github.com/383514580/vue-other#readme",
-  "dependencies": {
+  "devDependencies": {
+    "@types/jest": "^24.0.13",
+    "tslib": "^1.9.3",
+    "gh-pages": "^2.0.1",
+    "rollup": "^1.14.6",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.0.1",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript": "^1.0.1",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.5.1",
     "vue": "^2.6.10"
   }
