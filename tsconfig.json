@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "noImplicitThis":true,
         // 不报告执行不到的代码错误。
         "allowUnreachableCode": true,
         "strictNullChecks": true,

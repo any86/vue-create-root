@@ -15,13 +15,12 @@
     <main id="app"></main>
     <script>
         Vue.use(VueCreateRoot.install);
-
-        const Com = Vue.extend({
+        const comOpts = {
             name: 'Color',
             props: {
                 color: {
                     type: String,
-                    default: '#96c'
+                    default: '#fc0'
                 }
             },
             data() {
@@ -29,15 +28,16 @@
                     fontSize: '36px'
                 };
             },
-            template: `<h1 :style="{color, fontSize}" @click="toggle">我是组件</h1>`,
+            template: `<h1 :style="{color, fontSize}" @click="toggle">我是com组件, 默认颜色: {{color}}</h1>`,
             methods: {
                 toggle() {
                     this.fontSize = '36px' === this.fontSize ? '26px' : '36px';
                     this.$emit('toggle', this.fontSize);
                 }
             }
-        });
-
+        };
+        const Com = Vue.extend(comOpts);
+        Vue.createRoot(Com);
         const vm = new Vue({
             el: '#app',
 
@@ -55,29 +55,31 @@
             template: `<div :style="{fontSize}" @click="call">{{msg}}T</div>`,
 
             mounted() {
+                this.$color({props:{color:'#66c'}})
+                this.$color()
 
-                // setTimeout(()=>{}, 1000)
-                const app = this.$createRoot(Com, {
-                    as: '$abc',
-                    props: {
-                        color: '#f90'
-                    },
-                    attrs: {
-                        align: 'center'
-                    },
 
-                    on: {
-                        toggle() {
+                // const app = this.$createRoot(Com, {
+                //     as: '$abc',
+                //     props: {
+                //         color: '#f90'
+                //     },
+                //     attrs: {
+                //         align: 'center'
+                //     },
 
-                        }
-                    },
+                //     on: {
+                //         toggle() {
 
-                    nativeOn: {
-                        click: function() {
-                            alert(56789)
-                        }
-                    }
-                })
+                //         }
+                //     },
+
+                //     nativeOn: {
+                //         click: function() {
+                //             alert(56789)
+                //         }
+                //     }
+                // })
                 // app.$updateProps({
                 //     color: '#fc0'
                 // });
