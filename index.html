@@ -37,7 +37,16 @@
             }
         };
         const Com = Vue.extend(comOpts);
-        Vue.createRoot(Com);
+        const a = Vue.createRoot(Com, {
+            isSingle: true,
+            as: ['Dialog', 'warn']
+        });
+        const b = Vue.createRoot(Com, {
+            isSingle: false,
+            as: ['alert']
+        });
+
+        // console.log('a',a)
         const vm = new Vue({
             el: '#app',
 
@@ -55,12 +64,29 @@
             template: `<div :style="{fontSize}" @click="call">{{msg}}T</div>`,
 
             mounted() {
-                this.$color({props:{color:'#66c'}})
-                this.$color()
+                this.$alert();
+                this.$alert({
+                    props: {
+                        color: '#f10'
+                    }
+                });
+
+                // this.$Dialog.warn({
+                //     props: {
+                //         color: '#69c'
+                //     }
+                // })
+                console.log(this.$createRoot.list())
+
+                // this.$Color({props:{color:'#fac'}})
+                // this.$color({props:{color:'#f11'}})
 
 
+                // this.$color.$remove();
+
+                // let a = this.$color({props:{color:'#66c'}})
+                // a.$remove();
                 // const app = this.$createRoot(Com, {
-                //     as: '$abc',
                 //     props: {
                 //         color: '#f90'
                 //     },
@@ -80,6 +106,9 @@
                 //         }
                 //     }
                 // })
+
+
+                // app.$remove();
                 // app.$updateProps({
                 //     color: '#fc0'
                 // });

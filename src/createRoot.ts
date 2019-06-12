@@ -1,9 +1,13 @@
 // https://cn.vuejs.org/v2/guide/render-function.html#深入数据对象
 import Vue, { VueConstructor, Component, VNodeData, AsyncComponent } from 'vue';
 
+
+type RootComponent = Vue & { color?: string, $remove?: () => void, $updateProps?: (props: object) => void }
 interface createRoot {
-    (Vue: VueConstructor, Component: string | Component<any, any, any, any> | AsyncComponent<any, any, any, any> | (() => Component), options?: VNodeData & { target?: string | Element, isAppend?: boolean }): void;
+    (Vue: VueConstructor, Component: string | Component<any, any, any, any> | AsyncComponent<any, any, any, any> | (() => Component), options?: VNodeData & { target?: string | Element, isAppend?: boolean }): RootComponent;
 }
+
+
 
 const createRoot: createRoot = (Vue, Component, options = {}) => {
     const { target, isAppend, ...componentOptions } = Object.assign({ target: 'body', isAppend: true, }, options);
@@ -38,9 +42,10 @@ const createRoot: createRoot = (Vue, Component, options = {}) => {
     });
 
     // 对外$romove方法
-    const component: Vue & { color?: string, $remove?: () => void, $updateProps?: (props: object) => void } = root.$children[0];
+    const component: RootComponent = root.$children[0];
     component.$remove = root.destroy;
     component.$updateProps = (props) => {
+        console.log('props', props)
         componentOptions.props = { ...componentOptions.props, ...props };
         // https://cn.vuejs.org/v2/api/#vm-forceUpdate
         // 注意它仅仅影响实例本身和插入插槽内容的子组件，而不是所有子组件。
