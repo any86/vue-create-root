@@ -7,8 +7,6 @@ interface createRoot {
     (Vue: VueConstructor, Component: string | Component<any, any, any, any> | AsyncComponent<any, any, any, any> | (() => Component), options?: VNodeData & { target?: string | Element, isAppend?: boolean }): RootComponent;
 }
 
-
-
 const createRoot: createRoot = (Vue, Component, options = {}) => {
     const { target, isAppend, ...componentOptions } = Object.assign({ target: 'body', isAppend: true, }, options);
 

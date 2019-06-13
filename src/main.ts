@@ -6,13 +6,21 @@ import { RootComponent } from './interface';
 // https://cn.vuejs.org/v2/guide/typescript.html#增强类型以配合插件使用
 
 // ========= 声明 =========
-interface CreateRootOptions {
+interface CreateRootOptions extends Record<string, any> {
+    // 目标容器元素
     target?: string;
+    // 追加尾部还是头部
     isAppend?: boolean;
+    // 单例
     isSingle?: boolean;
+    // 别名
     as?: string | [string, string];
+    // 如果传入的不是props对象, 那么映射到props的字段是
+    oneProp?: string;
 }
+
 type Options = VNodeData & CreateRootOptions;
+
 type SupportiveComponentFormat = Component<any, any, any, any> | AsyncComponent<any, any, any, any> | (() => Component);
 declare module 'vue' {
     interface VueConstructor {
@@ -31,6 +39,7 @@ export const install = (Vue: VueConstructor, { prefix = '$' } = {}) => {
 
     Vue.createRoot = (component, options = {}) => {
         let name = options.as;
+        const { oneProp } = options;
         let isSingleGlobal = !!options.isSingle;
         if (undefined === name) {
             // Vue.extends生成的实例
@@ -95,7 +104,8 @@ export const install = (Vue: VueConstructor, { prefix = '$' } = {}) => {
                 instance.$updateProps(options);
             } else {
                 // 建立RootComponent并存储
-                instance = createRoot(Vue, component, { props: options });
+                const props = (oneProp && (Object !== options.constructor || oneProp in options)) ? { [oneProp]: options } : options;
+                instance = createRoot(Vue, component, { props });
                 if (undefined === instanceCommandMap[UNIQUE_PATH]) {
                     instanceCommandMap[UNIQUE_PATH] = [];
                 }

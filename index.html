@@ -48,13 +48,16 @@
         });
         const b = Vue.createRoot(Com, {
             isSingle: false,
-            as: ['alert']
+            as: ['alert'],
+            oneProp: 'value',
         });
 
         function onMounted() {
             const {
                 _uid
-            } = this.$alert();
+            } = this.$alert('only one 哦哦哦');
+
+
             const a = this.$alert({
                 color: '#16c'
             });
