@@ -22,9 +22,9 @@
                     type: String,
                     default: '#fc0'
                 },
-                
+
                 value: {
-                    type:String,
+                    type: String,
                     default: '当前'
                 },
             },
@@ -52,23 +52,34 @@
         });
 
         function onMounted() {
-            this.$alert();
-            this.$alert({
-                props: {
-                    color: '#f10'
-                }
+            const {
+                _uid
+            } = this.$alert();
+            const a = this.$alert({
+                color: '#16c'
             });
-            this.$alert.$remove();
+
+            let b = a.$on('toggle', () => {
+                alert(123)
+            });
+            b.$on('toggle', () => {
+                alert(455)
+            });
+
+            // a.$updateProps({value:'312312321'});
+            // this.$alert.$remove(_uid);
+            // this.$alert.$remove(_uid);
+
             // this.$alert.$remove();
 
             // 单例
-            this.$Dialog.warn();
-            this.$Dialog.warn({
-                props: {
-                    color: '#f10',
-                    value: '我是单例'
-                }
-            });
+            // this.$Dialog.warn();
+            // this.$Dialog.warn({
+            //     props: {
+            //         color: '#f10',
+            //         value: '我是单例'
+            //     }
+            // });
             // this.$Dialog.warn.$remove();
 
             console.log(this.$createRoot.list())
