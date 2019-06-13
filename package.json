@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "dev": "rollup -c --watch",
-    "build": "npx tsc",
+    "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,9 +26,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/383514580/vue-other/issues"
+    "url": "https://github.com/any86//vue-create-root/issues"
   },
-  "homepage": "https://github.com/383514580/vue-other#readme",
+  "homepage": "https://github.com/any86//vue-create-root#readme",
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "tslib": "^1.9.3",

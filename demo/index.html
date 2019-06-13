@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="vue.js"></script>
-    <script src="./dist/vue-create-root.umd.js"></script>
+    <script src="../dist/vue-create-root.umd.js"></script>
 
 </head>
 
@@ -53,21 +53,21 @@
         });
 
         function onMounted() {
-            const {
-                _uid
-            } = this.$alert('only one 哦哦哦');
+            // const {
+            //     _uid
+            // } = this.$alert('only one 哦哦哦');
 
 
-            const a = this.$alert({
-                color: '#16c'
-            });
+            // const a = this.$alert({
+            //     color: '#16c'
+            // });
 
-            let b = a.$on('toggle', () => {
-                alert(123)
-            });
-            b.$on('toggle', () => {
-                alert(455)
-            });
+            // let b = a.$on('toggle', () => {
+            //     alert(123)
+            // });
+            // b.$on('toggle', () => {
+            //     alert(455)
+            // });
 
             // a.$updateProps({value:'312312321'});
             // this.$alert.$remove(_uid);
@@ -78,14 +78,18 @@
             // 单例
             // this.$Dialog.warn();
             // this.$Dialog.warn({
-            //     props: {
-            //         color: '#f10',
-            //         value: '我是单例'
-            //     }
+            //     color: '#f10',
+            //     value: '我是单例'
             // });
             // this.$Dialog.warn.$remove();
 
-            console.log(this.$createRoot.list())
+            // console.log(this.$createRoot.list())
+
+            this.$createRoot(Com, {
+                props: {
+                    color: '#666'
+                }
+            })
 
         }
 

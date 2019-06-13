@@ -30,7 +30,7 @@ declare module 'vue' {
 
 
 // ========= 实现 =========
-export const install = (Vue: VueConstructor, { prefix = '$' } = {}) => {
+export const install = (Vue: VueConstructor, { prefix = '$', name = '$createRoot' } = {}) => {
 
     // 用来方便实现this.$xx.$remove()
     // 命令与实例的映射
@@ -98,13 +98,13 @@ export const install = (Vue: VueConstructor, { prefix = '$' } = {}) => {
             // 当前实例
             let instance: RootComponent;
             const activeCommand = instanceCommandMap[UNIQUE_PATH];
-            // 单例
+            // 单例第二次调用的时候, 只进行update
             if ((options.isSingle || isSingleGlobal) && undefined !== activeCommand && 0 < activeCommand.length) {
                 instance = activeCommand[activeCommand.length - 1].instance;
                 instance.$updateProps(options);
             } else {
                 // 建立RootComponent并存储
-                const props = (oneProp && (Object !== options.constructor || oneProp in options)) ? { [oneProp]: options } : options;
+                const props = (undefined !== oneProp && (Object !== options.constructor || oneProp in options)) ? { [oneProp]: options } : options;
                 instance = createRoot(Vue, component, { props });
                 if (undefined === instanceCommandMap[UNIQUE_PATH]) {
                     instanceCommandMap[UNIQUE_PATH] = [];
@@ -150,6 +150,6 @@ export const install = (Vue: VueConstructor, { prefix = '$' } = {}) => {
     };
 
     // 方法同步到实例上
-    Vue.prototype.$createRoot = (component: SupportiveComponentFormat, options: Pick<Options, Exclude<keyof Options, 'as'>>) => createRoot(Vue, component, options);
-    Vue.prototype.$createRoot.list = Vue.createRoot.list;
+    Vue.prototype[name] = (component: SupportiveComponentFormat, options: Pick<Options, Exclude<keyof Options, 'as'>>) => createRoot(Vue, component, options);
+    Vue.prototype[name].list = Vue.createRoot.list;
 }
