@@ -26,7 +26,8 @@ export default {
     input: './src/main.ts',
     plugins: [
         replace({
-            __VERSION__: pkg.version
+            __VERSION__: pkg.version,
+            __PKG_NAME__: pkg.name,
         }),
 
         typescript({

@@ -1,15 +1,20 @@
 // https://cn.vuejs.org/v2/guide/render-function.html#深入数据对象
-import { VueConstructor, Component, VNodeData, AsyncComponent } from 'vue';
+import Vue, { VueConstructor, CreateElement, VNodeData, VNodeChildren } from 'vue';
 import { throwError } from './utils';
 // 挂在到root后的实例
-import { RootComponent } from './interface';
+import { RootComponent, InputComponent } from './interface';
 interface createRoot {
-    (Vue: VueConstructor, Component: string | Component<any, any, any, any> | AsyncComponent<any, any, any, any> | (() => Component), options?: VNodeData & { target?: string | Element, isAppend?: boolean }): RootComponent;
+    (
+        Vue: VueConstructor,
+        component: InputComponent,
+        vNodeData: VNodeData,
+        childrenRender: (h: CreateElement) => VNodeChildren,
+        options: { target?: string | Element, isAppend?: boolean },
+        hooks?: Record<string, ((...args: any) => any)>
+    ): RootComponent;
 }
 
-const createRoot: createRoot = (Vue, Component, options = {}) => {
-    const { target, isAppend, ...componentOptions } = Object.assign({ target: 'body', isAppend: true, }, options);
-
+const createRoot: createRoot = (Vue, component, vNodeData, childrenRender, { target = 'body', isAppend = true } = {}, hooks = {}) => {
     // 组件容器
     const container = 'string' === typeof target ? document.querySelector(target) : target;
     if (!container) {
@@ -25,30 +30,51 @@ const createRoot: createRoot = (Vue, Component, options = {}) => {
         el,
 
         render(createElement) {
-            return createElement(Component, componentOptions);
-        }
+            // https://cn.vuejs.org/v2/guide/render-function.html#createElement-参数
+            return createElement(component, vNodeData, childrenRender ? [childrenRender(createElement)] : []);
+            // return createElement(component, vNodeData, [createElement('p', {slot:'m'}, 'xxx')]);
+        },
     });
 
     // 对外$romove方法
-    const component = root.$children[0] as RootComponent;
+    const rootComponent = root.$children[0] as RootComponent;
 
-    component.$remove = () => {
+    // 绑定到vue钩子
+    for (let hookName in hooks) {
+        rootComponent.$on(`hook:${hookName}`, (ev: any) => {
+            hooks[hookName](ev);
+        });
+    }
+
+    rootComponent.$on('hook:destroyed', () => {
         // 按照vue作者的说法$destroy中并没有做事件解绑, 而是等待系统回收内存
         // 所以$destroy因该只是做了解除数据绑定
         // https://github.com/vuejs/vue/issues/5187
         root.$destroy();
         // 删除元素
         container!.removeChild(root.$el);
-    };
+
+    });
+
+    // rootComponent.$remove = () => {
+    //     // 按照vue作者的说法$destroy中并没有做事件解绑, 而是等待系统回收内存
+    //     // 所以$destroy因该只是做了解除数据绑定
+    //     // https://github.com/vuejs/vue/issues/5187
+    //     root.$destroy();
+    //     // 删除元素
+    //     container!.removeChild(root.$el);
+    // };
 
 
-    component.$updateProps = (props) => {
-        componentOptions.props = { ...componentOptions.props, ...props };
+    rootComponent.$updateRenderData = (newProps, newChildrenRender) => {
+        vNodeData.props = { ...vNodeData.props, ...newProps };
+        childrenRender = newChildrenRender
         // https://cn.vuejs.org/v2/api/#vm-forceUpdate
         // 注意它仅仅影响实例本身和插入插槽内容的子组件，而不是所有子组件。
         root.$forceUpdate();
     };
-    return component;
+
+    return rootComponent;
 }
 
 

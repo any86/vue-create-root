@@ -13,17 +13,17 @@
 ## 示例
 
 ### 默认命令
-初始化后，通过**this.$createRoot**可以渲染任意组件.
+初始化后，所有组件内可以用 **this.$createRoot** 渲染组件.
 ```javascript
 // main.js中初始化
 Vue.use(createRoot);
 
-// 组件中调用
+// xxx.vue
 {
     methods{
         open(){
-            // 此处Com为任意组件
-            this.$createRoot(Com, {xxx:'xxx'});
+            // 此处UCom为任意组件
+            this.$createRoot(UCom);
         }
     }
 }
@@ -33,14 +33,14 @@ Vue.use(createRoot);
 ```javascript
 // main.js中初始化
 Vue.use(createRoot);
-// 此处Com为任意组件
-Vue.createRoot(Com, {as: 'alert'});
+// 此处UCom为任意组件
+Vue.createRoot(UCom, {as: 'alert'});
 
-// 组件中调用
+// xxx.vue
 {
     methods{
         open(){
-            this.$alert({xxx:'xxx'});
+            this.$alert({xxx});
         }
     }
 }
@@ -59,7 +59,7 @@ npm i -S vue-create-root
 
 ```javascript
 // xxx.vue
-const root = this.$createRoot(Com, {xxx:'xxx'});
+const root = this.$createRoot(UCom, {xxx:'xxx'});
 root.$on('show', ev=>{
     // code ...
 });
@@ -85,7 +85,7 @@ this.$alert().$on('show', ()=>{
 
 ```javascript
 // main.js
-Vue.createRoot(Com, {
+Vue.createRoot(UCom, {
     isSingle: true,
     as: ['alert']
 });
@@ -99,7 +99,7 @@ id1 === id2 // true
 ### 想要类似饿了么 / iView的那种"this.$Message.success()"? (as)
 ```javascript
 // main.js
-Vue.createRoot(Com, {
+Vue.createRoot(UCom, {
     as: ['Message', 'success']
 });
 
@@ -110,7 +110,7 @@ this.$Message.success({value: '你好vue!'});
 ### 有时候我的传的对象只有一个值, 还要写对象吗? (onProp)
 ```javascript
 // main.js
-Vue.createRoot(Com, {
+Vue.createRoot(UCom, {
     as: ['alert'],
     // value对应Com组件上的prop中的value字段
     onProp: 'value'

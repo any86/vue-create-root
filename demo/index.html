@@ -15,12 +15,23 @@
     <main id="app"></main>
     <script>
         Vue.use(VueCreateRoot.install);
-        const comOpts = {
+        const Com1 = {
+            name: 'Texttasd',
+            props: {
+                text: {
+                    type: String,
+                    default: '我有text'
+                }
+            },
+            template: `<p>我是静态的Com1, {{text}}</p>`
+        }
+
+        const Com = {
             name: 'Color',
             props: {
                 color: {
                     type: String,
-                    default: '#fc0'
+                    default: '#000'
                 },
 
                 value: {
@@ -33,7 +44,7 @@
                     fontSize: '36px'
                 };
             },
-            template: `<h1 :style="{color, fontSize}" @click="toggle">{{value}}, 颜色: {{color}}</h1>`,
+            template: `<h1 :style="{color, fontSize}" @click="toggle">{{value}}, 颜色: {{color}}<small style="color:#000;"><slot>插槽</slot></small></h1>`,
             methods: {
                 toggle() {
                     this.fontSize = '36px' === this.fontSize ? '26px' : '36px';
@@ -41,57 +52,115 @@
                 }
             }
         };
-        const Com = Vue.extend(comOpts);
-        const a = Vue.createRoot(Com, {
-            isSingle: true,
-            as: ['Dialog', 'warn']
+        // const a = Vue.createRoot(Com, {
+        //     isSingle: true,
+        //     as: ['Dialog', 'warn']
+        // });
+
+
+        const C = Vue.createRoot(Com1);
+        C.init({});
+
+        C.init({});
+
+        new C({
+            props: {
+                text: 'new 出来的'
+            }
         });
-        const b = Vue.createRoot(Com, {
-            isSingle: false,
-            as: ['alert'],
-            oneProp: 'value',
+
+        new C({
+            props: {
+                text: 'new 出来的2'
+            }
         });
 
-        function onMounted() {
-            // const {
-            //     _uid
-            // } = this.$alert('only one 哦哦哦');
+        let aaa = C.init({
+            props: {
+                text: '我在后面'
+            }
+        });
 
+        let d3 = new C({
+            props: {
+                text: 'new 出来的3'
+            }
+        });
+        aaa.$destroy();
 
-            // const a = this.$alert({
-            //     color: '#16c'
-            // });
+        const B = Vue.createRoot(Com);
 
-            // let b = a.$on('toggle', () => {
-            //     alert(123)
-            // });
-            // b.$on('toggle', () => {
-            //     alert(455)
-            // });
+        const text = '我是text'
+        const color = '#f99';
+        const value = '我是value'
 
-            // a.$updateProps({value:'312312321'});
-            // this.$alert.$remove(_uid);
-            // this.$alert.$remove(_uid);
+        B.init({
+            props: {
+                value: '我第一',
+                color
+            },
 
-            // this.$alert.$remove();
-
-            // 单例
-            // this.$Dialog.warn();
-            // this.$Dialog.warn({
-            //     color: '#f10',
-            //     value: '我是单例'
-            // });
-            // this.$Dialog.warn.$remove();
-
-            // console.log(this.$createRoot.list())
-
-            this.$createRoot(Com, {
-                props: {
-                    color: '#666'
+            on: {
+                toggle() {
+                    // alert('ttt')
                 }
-            })
+            },
 
-        }
+            childrenRender(h) {
+                return [h('p', {
+                    slot: 'default'
+                }, text)]
+            }
+        });
+
+
+        B.init({
+            props: {
+                value: '我第乌克兰是经典款了',
+                color: '#aca'
+            },
+            on: {
+                toggle() {
+                    // alert('ttt')
+                }
+            },
+            childrenRender(h) {
+                return [h('p', {
+                    slot: 'default'
+                }, text)]
+            }
+        });
+
+
+
+        // let c = new B(Com, {
+        //     props: {
+        //         value,
+        //         color
+        //     },
+        //     on: {
+        //         toggle() {
+        //             // alert('ttt')
+        //         }
+        //     },
+        //     childrenRender(h) {
+        //         return [h('p', {
+        //             slot: 'default'
+        //         }, text)]
+        //     }
+        // });
+
+        // c.$destroy();
+        // console.log(B)
+
+        Vue.prototype.$c = (text, color) =>
+
+
+
+
+            function onMounted() {
+                console.log('onMounted')
+            }
 
         // console.log('a',a)
         const vm = new Vue({
@@ -108,10 +177,10 @@
                 }
             },
 
-            template: `<div :style="{fontSize}" @click="call">{{msg}}</div>`,
+            template: `<div :style="{fontSize}" @click="call">{{msg}}: </div>`,
 
             mounted() {
-                onMounted.call(this);
+                // onMounted.call(this);
 
             },
 
