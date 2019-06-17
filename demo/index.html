@@ -13,8 +13,10 @@
 
 <body>
     <main id="app"></main>
+
+    <div id="my"></div>
     <script>
-        Vue.use(VueCreateRoot.install);
+        Vue.use(VueCreateRoot);
         const Com1 = {
             name: 'Texttasd',
             props: {
@@ -44,7 +46,7 @@
                     fontSize: '36px'
                 };
             },
-            template: `<h1 :style="{color, fontSize}" @click="toggle">{{value}}, 颜色: {{color}}<small style="color:#000;"><slot>插槽</slot></small></h1>`,
+            template: `<h1 :style="{color, fontSize}" @click="toggle">{{value}}, 颜色: {{color}}<small style="color:#69c;">#69c : <slot>插槽</slot></small></h1>`,
             methods: {
                 toggle() {
                     this.fontSize = '36px' === this.fontSize ? '26px' : '36px';
@@ -52,10 +54,6 @@
                 }
             }
         };
-        // const a = Vue.createRoot(Com, {
-        //     isSingle: true,
-        //     as: ['Dialog', 'warn']
-        // });
 
 
         const C = Vue.createRoot(Com1);
@@ -131,6 +129,10 @@
             }
         });
 
+        Vue.prototype.$b = (opt) => B.init({
+            props: opt
+        });
+
 
 
         // let c = new B(Com, {
@@ -153,14 +155,18 @@
         // c.$destroy();
         // console.log(B)
 
-        Vue.prototype.$c = (text, color) =>
 
 
-
-
-            function onMounted() {
-                console.log('onMounted')
-            }
+        function onMounted() {
+            this.$createRoot(Com, {
+                    color: '#f90'
+                },
+                h => h('p', `children123`), {
+                    isAppend: false,
+                    target: '#my'
+                }
+            )
+        }
 
         // console.log('a',a)
         const vm = new Vue({
@@ -180,7 +186,7 @@
             template: `<div :style="{fontSize}" @click="call">{{msg}}: </div>`,
 
             mounted() {
-                // onMounted.call(this);
+                onMounted.call(this);
 
             },
 
