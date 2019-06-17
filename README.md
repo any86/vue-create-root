@@ -10,11 +10,24 @@
 
 
 ![](https://ws1.sinaimg.cn/large/005IQkzXly1g40fdqbmikj30m407udfy.jpg)
+
+## 安装 
+```shell
+npm i -S vue-create-root
+```
+
+## cdn
+```
+https://unpkg.com/vue-create-root/dist/vue-create-root.umd.js
+```
+
+
 ## 示例
 
 ### 默认命令
-初始化后，所有组件内可以用 **this.$createRoot** 渲染组件.
+初始化后，组件内可以用 **this.$createRoot** 渲染组件.
 ```javascript
+
 // main.js中初始化
 Vue.use(createRoot);
 
@@ -29,29 +42,63 @@ Vue.use(createRoot);
 }
 ```
 
-### 自定义命令
+
+
+### 自定义命令: this.$alert
 ```javascript
 // main.js中初始化
 Vue.use(createRoot);
+
 // 此处UCom为任意组件
-Vue.createRoot(UCom, {as: 'alert'});
+const C = Vue.createRoot(UCom, {title: '标题', content: '你好vue'});
+
+// 注意此处的new, 单例模式的关键词是init
+Vue.prototype.$alert (...args) => new C(...args);
+
 
 // xxx.vue
-{
-    methods{
-        open(){
-            this.$alert({xxx});
+this.$alert({content: '你好vue !'});
+```
+
+### UCom组件
+``` javascript
+// UCom.vue
+export default {
+    name: 'UCom',
+    props: {
+        title: {
+            type: String,
+        },
+        content: {
+            type: String,
         }
-    }
+    },
+    template: `<article>
+                    <h1>{{title}}
+                        <small><slot name="title"></slot></small>
+                    </h1>
+                    <p>{{content}}</p>
+                    <p><slot></slot></p>
+                </article>`
 }
 ```
 
-## 安装 
-```shell
-npm i -S vue-create-root
-```
-
 ## 更多例子
+
+[监听事件(\$on)](#监听事件($on))
+
+[单例模式(init)](#单例模式(init))
+
+[this.\$Message.success](#this.$Message.success)
+
+[渲染插槽内容(childrenRender)](#渲染插槽内容(childrenRender))
+
+[参数简化(是否包含props)](#参数简化(是否包含props))
+
+[指定渲染位置](#指定渲染位置)
+
+[销毁(\$destroy)](#销毁($destroy))
+
 
 ### 监听事件($on)
 
@@ -75,74 +122,118 @@ root.$on('show', ev=>{
     // code ...
 });
 
+
+
 // 我们自定义的命令也一样
 this.$alert().$on('show', ()=>{
     // code ...
 });
 ```
 
-### 无论多少次调用, 都只想渲染一个组件, 单例模式? (isSingle)
-
+### 单例模式(init)
+无论多少次调用, 都只渲染同一组件.
 ```javascript
 // main.js
-Vue.createRoot(UCom, {
-    isSingle: true,
-    as: ['alert']
-});
+Vue.use(CreateRoot)
+const C = Vue.createRoot(UCom);
+
+// 注意, 单例模式使用C上的init渲染
+Vue.prototype.$loading = (text)=> C.init({value: text});
 
 // xxx.vue
-// 页面只会渲染出"你好ts"
-const {_uid:id1} = this.$alert({value: '你好js'});
-const {_uid:id2} = this.$alert({value: '你好ts'});
-id1 === id2 // true
+// 页面上只会显示一个loading, 显示"你好ts"
+this.$loading({value: '正在加载js'});
+this.$loading({value: '正在加载ts'});
 ```
-### 想要类似饿了么 / iView的那种"this.$Message.success()"? (as)
+**注意**: 看到这您可能发现了**this.$createRoot**生成的实例**不支持单例**,  这是因为设计他的目的仅仅是为了组件内的某一次临时调用, 如需要复请用**Vue.createRoot**在**main.js**中生成.
+
+### 渲染插槽内容(childrenRender)
+其实就是vue的render函数, 更多render的用法请看官网: https://cn.vuejs.org/v2/guide/render-function.html#深入-data-对象
 ```javascript
 // main.js
-Vue.createRoot(UCom, {
-    as: ['Message', 'success']
-});
+Vue.use(CreateRoot)
+const B = Vue.createRoot(UCom);
+
+// 建立$alert
+Vue.prototype.$alert = (...args)=> new B(...args);
+
+// xxx.vue
+this.$alert({value: '我有2个插槽哦: title和content'}, h=>
+    [
+        h('h1', {attrs: 
+            {align: 'center', slot: 'title'}
+        }, '我是标题'),
+        
+        h('p','我是内容')
+    ]
+);
+```
+### this.$Message.success
+想要类似"饿了么 / iView"那种 this.$Message.success()?
+```javascript
+// main.js
+const C = Vue.createRoot(UCom);
+Vue.prototype.$Message = {
+    success: new C()
+};
 
 // xxx.vue
 this.$Message.success({value: '你好vue!'});
 ```
+### 参数简化(是否包含props)
+**new C** | **C.init**的第一个(**$createRoot**的第二个)参数支持2种形式, 
 
-### 有时候我的传的对象只有一个值, 还要写对象吗? (onProp)
+**如果**包含**props**字段, 那么传入的就是[VNodeData数据](https://cn.vuejs.org/v2/guide/render-function.html#深入-data-对象), 
+
+**否则**传入的数据会当做props字段, 会自动构造成{props: options}格式;
+
+``` javascript
+// 由于没有props字段, 那么C内部会自动构造VNodeData格式, 也就是{props: {value:1}}
+new C({value:1});
+
+// 反之那么证明您传入的就是一个VNodeData, C内部就会直接使用.
+new C(
+    props:{value:1},
+    on: {click: e=>{}}
+);
+```
+**再次强调**: 第二种方式**支持完整**的[VNodeData类型](https://cn.vuejs.org/v2/guide/render-function.html#深入-data-对象), 因为内部实现就是包装Vue的render函数.
+
+### 指定渲染位置
+默认组件会被插入到body的尾部(`{target: 'body', isAppend: true}`).
+
 ```javascript
-// main.js
-Vue.createRoot(UCom, {
-    as: ['alert'],
-    // value对应Com组件上的prop中的value字段
-    onProp: 'value'
-});
+// 插入到id为my元素内部的第一个位置.
+this.$createRoot(UCom, {}, undefined, {target: '#my', isAppend: false});
 
-// xxx.vue
-// 配置后, 以下2种方式均可以使用
-this.$alert('你好vue!');
-// 等价于
-this.$alert({value: '你好vue!'});
+// Vue.createRoot生成的构造函数也可以
+C({content: '我也可以'}, undefined, , {target: '#my', isAppend: false} );
 ```
 
-### 销毁($remove)
+### 销毁($destroy)
 
 #### 单例
-单例就很简单了, 直接$remove().
+单例就很简单了, 直接$destroy().
 ```javascript
 this.$alert('你好vue!');
 this.$alert('你好朋友!');
-this.$alert.$remove();
+this.$alert.$destroy();
 ```
 
 #### 非单例
-$remove()会按照生成顺序, 从后想前删除, 先删除刚刚生成.
+
 ```javascript
-const {_uid:id1} = this.$dialog('你好vue!');
-const {_uid:id2} = this.$dialog('你好react!');
-const {_uid:id3} = this.$dialog('你好angular!');
+const v = this.$dialog('你好vue!');
+const r = this.$dialog('你好react!');
+const a = this.$dialog('你好angular!');
 
 // 删除"你好angular"的实例
-this.$dialog.remove();
+a.$destroy();
 
 // 删除"你好vue"的实例
-this.$dialog.remove(id1);
+v.$destroy();
+
+// $createRoot的销毁
+const xx = this.$createRoot(UCom);
+xx.$destroy();
 ```
