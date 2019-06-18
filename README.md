@@ -50,7 +50,7 @@ Vue.use(createRoot);
 Vue.use(createRoot);
 
 // 此处UCom为任意组件
-const C = Vue.createRoot(UCom, {title: '标题', content: '你好vue'});
+const C = Vue.createRoot(UCom);
 
 // 注意此处的new, 单例模式的关键词是init
 Vue.prototype.$alert (...args) => new C(...args);
