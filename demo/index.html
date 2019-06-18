@@ -8,37 +8,33 @@
     <title>Document</title>
     <script src="vue.js"></script>
     <script src="../dist/vue-create-root.umd.js"></script>
-
+    <link rel="stylesheet" href="./index.css">
 </head>
 
 <body>
-    <main id="app"></main>
+    <main id="app">
+
+    </main>
 
     <div id="my"></div>
     <script>
         Vue.use(VueCreateRoot);
-        const Com1 = {
-            name: 'Texttasd',
-            props: {
-                text: {
-                    type: String,
-                    default: '我有text'
-                }
-            },
-            template: `<p>我是静态的Com1, {{text}}</p>`
-        }
 
         const Com = {
-            name: 'Color',
+            name: 'UCom',
             props: {
-                color: {
+                isShow: {
+                    type: Boolean,
+                    default: false
+                },
+                title: {
                     type: String,
-                    default: '#000'
+                    default: '我是标题'
                 },
 
-                value: {
+                content: {
                     type: String,
-                    default: '当前'
+                    default: '我是内容'
                 },
             },
             data() {
@@ -46,129 +42,56 @@
                     fontSize: '36px'
                 };
             },
-            template: `<h1 :style="{color, fontSize}" @click="toggle">{{value}}, 颜色: {{color}}<small style="color:#69c;">#69c : <slot>插槽</slot></small></h1>`,
-            methods: {
-                toggle() {
-                    this.fontSize = '36px' === this.fontSize ? '26px' : '36px';
-                    this.$emit('toggle', this.fontSize);
+            watch: {
+                isShow(isShow) {
+                    console.log('watch: ', {
+                        isShow
+                    })
                 }
-            }
+            },
+
+            template: `
+                <transition name="bounce">
+                    <article v-if="isShow" class="dialog" @click="close">
+                        <h1>{{title}}
+                            <small><slot name="title"></slot></small>
+                        </h1>
+                        <p class="content">{{content}}</p>
+                        <p><slot></slot></p>
+                    </article>
+                </transition>`,
+            methods: {
+                close() {
+                    this.$emit('close');
+                }
+            },
+            destroyed() {
+                console.warn('des com')
+            },
         };
 
 
-        const C = Vue.createRoot(Com1);
-        C.init({});
-
-        C.init({});
-
-        new C({
-            props: {
-                text: 'new 出来的'
-            }
-        });
-
-        new C({
-            props: {
-                text: 'new 出来的2'
-            }
-        });
-
-        let aaa = C.init({
-            props: {
-                text: '我在后面'
-            }
-        });
-
-        let d3 = new C({
-            props: {
-                text: 'new 出来的3'
-            }
-        });
-        aaa.$destroy();
-
+        // 多例
         const B = Vue.createRoot(Com);
-
-        const text = '我是text'
-        const color = '#f99';
-        const value = '我是value'
-
-        B.init({
-            props: {
-                value: '我第一',
-                color
-            },
-
-            on: {
-                toggle() {
-                    // alert('ttt')
-                }
-            },
-
-            childrenRender(h) {
-                return [h('p', {
-                    slot: 'default'
-                }, text)]
-            }
+        Vue.prototype.$alert = (props) => new B({
+            isShow: true,
+            ...props
         });
 
-
-        B.init({
-            props: {
-                value: '我第乌克兰是经典款了',
-                color: '#aca'
-            },
-            on: {
-                toggle() {
-                    // alert('ttt')
-                }
-            },
-            childrenRender(h) {
-                return [h('p', {
-                    slot: 'default'
-                }, text)]
-            }
-        });
-
-        Vue.prototype.$b = (opt) => B.init({
-            props: opt
-        });
+        // Vue.prototype.$single = (props) => Vue.createRoot(Com, {
+        //     isShow: true,
+        //     ...props
+        // })
 
 
+        // 单例
+        const C = Vue.createRoot(Com);
+        Vue.prototype.$single = (props) => C.init({
+            isShow: true,
+            ...props
+        })
 
-        // let c = new B(Com, {
-        //     props: {
-        //         value,
-        //         color
-        //     },
-        //     on: {
-        //         toggle() {
-        //             // alert('ttt')
-        //         }
-        //     },
-        //     childrenRender(h) {
-        //         return [h('p', {
-        //             slot: 'default'
-        //         }, text)]
-        //     }
-        // });
-
-        // c.$destroy();
-        // console.log(B)
-
-
-
-        function onMounted() {
-            this.$createRoot(Com, {
-                    color: '#f90'
-                },
-                h => h('p', `children123`), {
-                    isAppend: false,
-                    target: '#my'
-                }
-            )
-        }
-
-        // console.log('a',a)
+        Vue.prototype.$single.$destroy = C.$destroy;
         const vm = new Vue({
             el: '#app',
 
@@ -177,32 +100,59 @@
             },
 
             data() {
-                return {
-                    msg: '我是独立的vue实例',
-                    fontSize: '36px'
-                }
+                return {};
             },
 
-            template: `<div :style="{fontSize}" @click="call">{{msg}}: </div>`,
 
-            mounted() {
-                onMounted.call(this);
-
-            },
+            template: `<section class="fix-bottom">
+                <button @click="call">生成对话框</button>
+                <button @click="callSingle">单例</button>
+                <button @click="closeSingle">关闭单例</button>
+            </section>`,
 
             methods: {
                 call() {
-                    alert(321)
+                    let i = this.$alert({
+                        title: '提示',
+                        content: '你好vue!',
+                    });
+
+
+                    i.component.$on('close', () => {
+                        i.$update({
+                            isShow: false
+                        })
+                        console.log('$emit close')
+                    })
+
+                    i.component.$on('hook:destroyed', () => {
+                        console.log('$emit hook:destroyed')
+                    })
+
                 },
+
+                callSingle() {
+                    this.$single({
+                        title: '提示',
+                        content: '只能打开一个哦!',
+                    });
+                },
+
+                closeSingle(){
+                    this.$single.$destroy()
+                    console.dir()
+                },
+
                 destroy() {
                     this.$destroy();
                 }
             },
 
             destroyed() {
-                // alert('des')
+                console.warn('des')
             },
         });
+
     </script>
 </body>
 
