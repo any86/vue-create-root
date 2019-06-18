@@ -1,9 +1,12 @@
 // 核心
 // https://cn.vuejs.org/v2/guide/render-function.html#深入数据对象
-import { RootComponent, createRootFn } from './interface';
+import { VNodeData } from 'vue';
+import { RootComponent, createRootFn, ChildrenRender } from './interface';
 import { throwError } from './utils';
 
 const createRoot: createRootFn = (Vue, component, data, childrenRender, { target = 'body', isAppend = true } = {}) => {
+    let vNodeData:VNodeData;
+    let _childrenRender:ChildrenRender|undefined = childrenRender;
     // 组件容器
     const container = 'string' === typeof target ? document.querySelector(target) : target;
     if (!container) {
@@ -20,30 +23,32 @@ const createRoot: createRootFn = (Vue, component, data, childrenRender, { target
 
         render(createElement) {
             // https://cn.vuejs.org/v2/guide/render-function.html#深入数据对象
-            const vNodeData = ('props' in data) ? data : {props:data};
-            return createElement(component, vNodeData, childrenRender && childrenRender(createElement));
+            const rootComponent = createElement(component, vNodeData, _childrenRender && _childrenRender(createElement));
+            return rootComponent;
         },
     });
 
     // 对外$romove方法
     const rootComponent = root.$children[0] as RootComponent;
-
     rootComponent.$on('hook:destroyed', () => {
         // 按照vue作者的说法$destroy中并没有做事件解绑, 而是等待系统回收内存
         // 所以$destroy因该只是做了解除数据绑定
         // https://github.com/vuejs/vue/issues/5187
         root.$destroy();
         // 删除元素
-        container!.removeChild(root.$el);
+        container!.removeChild(rootComponent.$el);
     });
 
-    rootComponent.$updateRenderData = (newProps, newChildrenRender) => {
-        data.props = { ...data.props, ...newProps };
-        childrenRender = newChildrenRender
+    rootComponent.$updateRenderData = (newData, newChildrenRender) => {
+        vNodeData = ('props' in newData) ? newData : { props: newData };
+        _childrenRender = newChildrenRender
         // https://cn.vuejs.org/v2/api/#vm-forceUpdate
         // 注意它仅仅影响实例本身和插入插槽内容的子组件，而不是所有子组件。
         root.$forceUpdate();
     };
+
+    // 为了触发vue动画, 所以必须在实例创建后在执行$forceUpdate;
+    rootComponent.$updateRenderData(data, _childrenRender);
 
     return rootComponent;
 }

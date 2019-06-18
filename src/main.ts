@@ -20,7 +20,7 @@ declare module 'vue' {
  *  @param {String} Options.prefix 前缀
  *  @param {String} Options.name $createRoot如果冲突可以改名
  */
-export default function (Vue: VueConstructor, { name = '$createRoot' } = {}) {
+function install(Vue: VueConstructor, { name = '$createRoot' } = {}) {
     Vue.createRoot = (component) => {
         // 创建一个地址存储本次运行createRoot生成的实例
         let activeRootComponent: RootComponent | null = null;
@@ -36,3 +36,5 @@ export default function (Vue: VueConstructor, { name = '$createRoot' } = {}) {
 
     Vue.createRoot.version = '__VERSION__';
 }
+
+export default { install };
