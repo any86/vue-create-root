@@ -85,19 +85,19 @@ export default {
 
 ## 更多例子
 
-[监听事件(\$on)](#监听事件($on))
+[监听事件(\$on)](#监听事件on)
 
-[单例模式(init)](#单例模式(init))
+[单例模式(init)](#单例模式init)
 
-[this.\$Message.success](#this.$Message.success)
+[this.\$Message.success](#thismessagesuccess)
 
-[渲染插槽内容(childrenRender)](#渲染插槽内容(childrenRender))
+[渲染插槽内容(childrenRender)](#渲染插槽内容childrenrender)
 
-[参数简化(是否包含props)](#参数简化(是否包含props))
+[参数简化(是否包含props)](#参数简化是否包含props)
 
 [指定渲染位置](#指定渲染位置)
 
-[销毁(\$destroy)](#销毁($destroy))
+[销毁(\$destroy)](#销毁destroy)
 
 
 ### 监听事件($on)
