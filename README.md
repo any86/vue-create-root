@@ -33,16 +33,12 @@ Vue.use(createRoot);
 
 // xxx.vue
 {
-    methods{
-        open(){
-            // 此处UCom为任意组件
-            this.$createRoot(UCom);
-        }
+    mounted(){
+        // 此处UCom为任意组件
+        this.$createRoot(UCom);
     }
 }
 ```
-
-
 
 ### 自定义命令: this.$alert
 ```javascript
@@ -52,9 +48,8 @@ Vue.use(createRoot);
 // 此处UCom为任意组件
 const C = Vue.createRoot(UCom);
 
-// 注意此处的new, 单例模式的关键词是init
+// 注意此处的new, 单例模式是init
 Vue.prototype.$alert (...args) => new C(...args);
-
 
 // xxx.vue
 this.$alert({content: '你好vue !'});
