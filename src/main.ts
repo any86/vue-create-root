@@ -1,6 +1,6 @@
 import { VueConstructor } from 'vue';
 import { InputComponent, RootComponent, createRootFn, Tail } from './interface';
-import CreateRootClassForExport from './CreateRootWrapClass'
+import CreateRootClassWrapFunction from './CreateRootClassWrapFunction'
 import createRoot from './createRoot';
 // https://www.tslang.cn/docs/handbook/declaration-merging.html (模块扩展章节)
 // https://cn.vuejs.org/v2/guide/typescript.html#增强类型以配合插件使用
@@ -13,7 +13,6 @@ declare module 'vue' {
     }
 }
 
-
 /**
  * 功能实现
  * @param {VueConstructor} Vue构造函数
@@ -21,14 +20,7 @@ declare module 'vue' {
  *  @param {String} Options.name $createRoot如果冲突可以改名
  */
 function install(Vue: VueConstructor, { name = '$createRoot' } = {}) {
-    Vue.createRoot = (component) => {
-        // 创建一个地址存储本次运行createRoot生成的实例
-        let activeRootComponent: RootComponent | null = null;
-        CreateRootClassForExport.initCache(activeRootComponent);
-        CreateRootClassForExport.bindComponent(component);
-        CreateRootClassForExport.bindVue(Vue);
-        return CreateRootClassForExport;
-    }
+    Vue.createRoot = (component) => CreateRootClassWrapFunction(Vue, component);
     // 核心功能
     Vue.prototype[name] = (...args: Tail<Parameters<createRootFn>>) => {
         createRoot(Vue, ...args);

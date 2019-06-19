@@ -49,6 +49,10 @@ button {
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.4);
 }
 
+button.danger{
+    background: #f44336;
+}
+
 button:active {
     opacity: 0.6;
     box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.4);

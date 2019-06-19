@@ -1,6 +1,6 @@
 {
   "name": "vue-create-root",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "做一些通常UI组件库不包含的vue小工具",
   "unpkg": "dist/vue-create-root.umd.js",
   "jsdelivr": "dist/vue-create-root.umd.js",

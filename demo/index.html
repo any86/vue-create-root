@@ -71,6 +71,7 @@
         };
 
 
+
         // 多例
         const B = Vue.createRoot(Com);
         Vue.prototype.$alert = (props) => new B({
@@ -78,20 +79,54 @@
             ...props
         });
 
-        // Vue.prototype.$single = (props) => Vue.createRoot(Com, {
-        //     isShow: true,
-        //     ...props
-        // })
-
-
-        // 单例
         const C = Vue.createRoot(Com);
+
+        const E = Vue.createRoot(Com);
+
         Vue.prototype.$single = (props) => C.init({
             isShow: true,
             ...props
-        })
+        });
 
-        Vue.prototype.$single.$destroy = C.$destroy;
+        Vue.prototype.$single.close = () => {
+            C.$update({
+                isShow: false
+            })
+        }
+
+
+        Vue.prototype.$single1 = (props) => E.init({
+            isShow: true,
+            ...props
+        });
+        Vue.prototype.$single1.close = () => {
+            E.$update({
+                isShow: false
+            })
+        }
+
+        // 单例
+        // const C = Vue.createRoot(Com);
+        // Vue.prototype.$single = (props) => C.init({
+        //     isShow: true,
+        //     ...props
+        // });
+
+
+        // Vue.prototype.$single.close = () => C.$update({
+        //     isShow: false
+        // });
+
+        // Vue.prototype.$single.$destroy = C.$destroy;
+
+
+
+
+        // Vue.prototype.$single1.close = () => D.$update({
+        //     isShow: false
+        // });
+        // Vue.prototype.$single1.$destroy = D.$destroy;
+
         const vm = new Vue({
             el: '#app',
 
@@ -106,8 +141,11 @@
 
             template: `<section class="fix-bottom">
                 <button @click="call">生成对话框</button>
+                <button class="danger">关闭对话框</button>
                 <button @click="callSingle">单例</button>
-                <button @click="closeSingle">关闭单例</button>
+                <button @click="closeSingle" class="danger">关闭单例</button>
+                <button @click="callSingle1">单例</button>
+                <button @click="closeSingle1" class="danger">关闭单例</button>
             </section>`,
 
             methods: {
@@ -136,10 +174,30 @@
                         title: '提示',
                         content: '只能打开一个哦!',
                     });
+
+                    // this.$single({
+                    //     title: '提示123213',
+                    //     content: '只能打开一个哦!',
+                    // });
+                    console.dir(C);
                 },
 
-                closeSingle(){
-                    this.$single.$destroy()
+                closeSingle() {
+                    this.$single.close()
+                    console.dir()
+                },
+
+
+
+                callSingle1() {
+                    this.$single1({
+                        title: '提示',
+                        content: '只能打开一个哦!',
+                    });
+                },
+
+                closeSingle1() {
+                    this.$single1.close()
                     console.dir()
                 },
 
@@ -152,7 +210,6 @@
                 console.warn('des')
             },
         });
-
     </script>
 </body>
 

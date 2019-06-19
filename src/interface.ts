@@ -15,8 +15,8 @@ export interface createRootFn {
         Vue: VueConstructor,
         component: InputComponent,
         vNodeData: VNodeData|Record<string,any>,
-        childrenRender: (createElement: CreateElement) => VNodeChildren,
-        options: { target?: string | Element, isAppend?: boolean },
+        childrenRender?: (createElement: CreateElement) => VNodeChildren,
+        options?: { target?: string | Element, isAppend?: boolean },
     ): RootComponent;
 }
 
