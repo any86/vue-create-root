@@ -48,7 +48,7 @@ Vue.use(createRoot);
 // 此处UCom为任意组件
 const C = Vue.createRoot(UCom);
 
-// 注意此处的new, 单例模式是init
+// 注意此处的new C, 单例模式是C.init
 Vue.prototype.$alert = (...args) => new C(...args);
 
 // xxx.vue
