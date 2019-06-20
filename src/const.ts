@@ -1,1 +1,0 @@
-export const DEFAULT_PROPS = ['value', 'content', 'message', 'text', 'msg'];

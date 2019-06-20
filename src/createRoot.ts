@@ -18,12 +18,7 @@ const createRoot: createRootFn = (Vue, component, data, childrenRender, options 
     const el = document.createElement('div');
     // https://developer.mozilla.org/zh-CN/docs/Web/API/Element/insertAdjacentElement
     // 由于throw被封装, ts没办法正确推断container不为空
-    
-    if('test' === process.env.NODE_ENV) {
-        container!.appendChild(el);
-    } else {
-        container!.insertAdjacentElement(isAppend ? 'beforeend' : 'afterbegin', el);
-    }
+    container!.insertAdjacentElement(isAppend ? 'beforeend' : 'afterbegin', el);
 
     const root = new Vue({
         el,
