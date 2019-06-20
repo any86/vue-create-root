@@ -49,7 +49,7 @@ Vue.use(createRoot);
 const C = Vue.createRoot(UCom);
 
 // 注意此处的new, 单例模式是init
-Vue.prototype.$alert (...args) => new C(...args);
+Vue.prototype.$alert = (...args) => new C(...args);
 
 // xxx.vue
 this.$alert({content: '你好vue !'});
