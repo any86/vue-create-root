@@ -2,7 +2,8 @@ import Vue from 'vue';
 import { ComponentOptions,VueConstructor,VNode } from 'vue/types/index';
 import { RootComponent } from '../src/interface';
 import createRoot from '../src/createRoot';
-
+import './utils/mock';
+const mockDestroy = jest.fn();
 const Com: ComponentOptions<Vue> = {
     name: 'UCom',
     props: {
@@ -25,46 +26,47 @@ const Com: ComponentOptions<Vue> = {
             fontSize: '36px'
         };
     },
-    watch: {
-        isShow(isShow: boolean) {
-            console.log('watch: ', {
-                isShow
-            })
-        }
-    },
 
     render(createElement):VNode{
         return createElement('p', (this as any).content);
     },
 
-    // template: `
-    //     <transition name="bounce">
-    //         <article v-if="isShow" class="dialog" @click="close">
-    //             <h1>{{title}}
-    //                 <small><slot name="title"></slot></small>
-    //             </h1>
-    //             <p class="content">{{content}}</p>
-    //             <p><slot></slot></p>
-    //         </article>
-    //     </transition>`,
     methods: {
         close() {
             this.$emit('close');
         }
     },
     destroyed() {
-        console.warn('des com')
+        mockDestroy()
     },
 };
 
-let rootComponent: RootComponent;
-beforeAll(() => {
-    rootComponent = createRoot(Vue, Com, { isShow: true });
-})
-
 test(`是否正确生成实例?`, () => {
+    const rootComponent = createRoot(Vue, Com, { });
     expect(rootComponent).toBeInstanceOf(Vue);
     expect(rootComponent.$el).toBeInstanceOf(HTMLElement);
     expect(rootComponent.$updateRenderData).not.toBeUndefined();
-    
 });
+
+test(`target元素找不到时, 是否抛出异常?`, () => {
+    const _fn =()=> createRoot(Vue, Com, { }, undefined, {target:'#app'});
+    expect(_fn).toThrow('__PKG_NAME__: target元素不存在');
+});
+
+test('$destroyed销毁是否彻底?', ()=>{
+    const rootComponent = createRoot(Vue, Com, { });
+    const {$el} = rootComponent;
+    rootComponent.$destroy();
+    expect(mockDestroy).toBeCalledTimes(1)
+    expect(document.body.contains($el)).toBeFalsy();
+});
+
+
+test('$updateRenderData设置是否生效', ()=>{
+    const content = '测试内容!';
+    const rootComponent = createRoot(Vue, Com, {content });
+    const {$el} = rootComponent;
+    setTimeout(()=>{
+        expect($el.innerHTML).toBe(content);
+    }, 0)
+})
