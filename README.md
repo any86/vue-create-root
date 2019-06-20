@@ -1,4 +1,4 @@
-# vue-create-root   [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![npm bundle size (minified + gzip)][size-image]][size-url]
+# vue-create-root   [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![npm bundle size (minified + gzip)][size-image]][size-url] [![codecov](https://codecov.io/gh/any86/vue-create-root/branch/develop/graph/badge.svg)](https://codecov.io/gh/any86/vue-create-root)  [![CircleCI](https://circleci.com/gh/any86/vue-create-root.svg?style=svg)](https://circleci.com/gh/any86/vue-create-root)
 
 [size-image]: https://img.shields.io/bundlephobia/minzip/vue-create-root.svg
 [size-url]: https://bundlephobia.com/result?p=vue-create-root
@@ -48,8 +48,8 @@ Vue.use(createRoot);
 // 此处UCom为任意组件
 const C = Vue.createRoot(UCom);
 
-// 注意此处的new, 单例模式是init
-Vue.prototype.$alert (...args) => new C(...args);
+// 注意此处的new C, 单例模式是C.init
+Vue.prototype.$alert = (...args) => new C(...args);
 
 // xxx.vue
 this.$alert({content: '你好vue !'});
@@ -187,10 +187,10 @@ this.$Message.success({value: '你好vue!'});
 new C({value:1});
 
 // 反之那么证明您传入的就是一个VNodeData, C内部就会直接使用.
-new C(
+new C({
     props:{value:1},
     on: {click: e=>{}}
-);
+});
 ```
 **再次强调**: 第二种方式**支持完整**的[VNodeData类型](https://cn.vuejs.org/v2/guide/render-function.html#深入-data-对象), 因为内部实现就是包装Vue的render函数.
 
