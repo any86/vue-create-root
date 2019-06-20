@@ -12,6 +12,9 @@ import replace from 'rollup-plugin-replace';
 import pkg from './package.json';
 // 代码生成sourcemaps
 import sourceMaps from 'rollup-plugin-sourcemaps'
+import alias from 'rollup-plugin-alias'
+
+
 
 // 代码头
 const banner =
@@ -25,6 +28,9 @@ const banner =
 export default {
     input: './src/main.ts',
     plugins: [
+        // alias({
+        //     'vue': 'vue/dist/vue.esm'
+        // }),
         replace({
             __VERSION__: pkg.version,
             __PKG_NAME__: pkg.name,
