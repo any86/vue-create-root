@@ -17,7 +17,7 @@ import sourceMaps from 'rollup-plugin-sourcemaps'
 const banner =
     `/*!
  * AnyTouch.js v${pkg.version}
- * (c) 2018-${new Date().getFullYear()} Russell
+ * (c) 2019-${new Date().getFullYear()} Russell
  * https://github.com/any86/vue-create-root
  * Released under the MIT License.
  */`
@@ -45,7 +45,7 @@ export default {
             include: 'node_modules/**'
         }),
 
-        sourceMaps()
+        sourceMaps(),
 
     ],
     output: [{
