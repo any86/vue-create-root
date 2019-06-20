@@ -1,12 +1,13 @@
 // 核心
 // https://cn.vuejs.org/v2/guide/render-function.html#深入数据对象
-import { VNodeData } from 'vue';
+import { VNodeData } from 'vue/types/index';
 import { RootComponent, createRootFn, ChildrenRender } from './interface';
 import { throwError } from './utils';
 
-const createRoot: createRootFn = (Vue, component, data, childrenRender, { target = 'body', isAppend = true } = {}) => {
-    let vNodeData:VNodeData;
-    let _childrenRender:ChildrenRender|undefined = childrenRender;
+const createRoot: createRootFn = (Vue, component, data, childrenRender, options = {}) => {
+    const { target = 'body', isAppend = true } = options;
+    let vNodeData: VNodeData;
+    let _childrenRender: ChildrenRender | undefined = childrenRender;
     // 组件容器
     const container = 'string' === typeof target ? document.querySelector(target) : target;
     if (!container) {
@@ -17,7 +18,13 @@ const createRoot: createRootFn = (Vue, component, data, childrenRender, { target
     const el = document.createElement('div');
     // https://developer.mozilla.org/zh-CN/docs/Web/API/Element/insertAdjacentElement
     // 由于throw被封装, ts没办法正确推断container不为空
-    container!.insertAdjacentElement(isAppend ? 'beforeend' : 'afterbegin', el);
+    
+    if('test' === process.env.NODE_ENV) {
+        container!.appendChild(el);
+    } else {
+        container!.insertAdjacentElement(isAppend ? 'beforeend' : 'afterbegin', el);
+    }
+
     const root = new Vue({
         el,
 

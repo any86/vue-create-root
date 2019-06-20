@@ -1,5 +1,5 @@
-import Vue, { VueConstructor, Component, VNode, CreateElement, VNodeData, VNodeChildren, AsyncComponent } from 'vue';
-export type InputComponent = Component<Vue>;
+import Vue, { VueConstructor, Component, VNode, CreateElement, VNodeData, VNodeChildren, ComponentOptions } from 'vue';
+export type InputComponent = ComponentOptions<Vue>;
 
 // 渲染字元素和插槽内容
 export type ChildrenRender = (createElement: CreateElement) => VNodeChildren;

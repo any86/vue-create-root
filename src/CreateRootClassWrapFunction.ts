@@ -20,7 +20,6 @@ export default (Vue: VueConstructor, inputComponent: InputComponent) => {
                 instance.$update(options, childrenRender);
             } else {
                 instance = new CreateRoot(options, childrenRender);
-                console.log(instance)
             }
         }
 

@@ -135,17 +135,19 @@
             },
 
             data() {
-                return {};
+                return {
+                    store: []
+                };
             },
 
 
             template: `<section class="fix-bottom">
                 <button @click="call">生成对话框</button>
-                <button class="danger">关闭对话框</button>
-                <button @click="callSingle">单例</button>
-                <button @click="closeSingle" class="danger">关闭单例</button>
-                <button @click="callSingle1">单例</button>
-                <button @click="closeSingle1" class="danger">关闭单例</button>
+                <button @click="closeAll" class="danger">关闭所有对话框</button>
+                <button @click="callSingle">单例1</button>
+                <button @click="closeSingle" class="danger">关闭单例1</button>
+                <button @click="callSingle1">单例2</button>
+                <button @click="closeSingle1" class="danger">关闭单例2</button>
             </section>`,
 
             methods: {
@@ -154,7 +156,7 @@
                         title: '提示',
                         content: '你好vue!',
                     });
-
+                    this.store.push(i);
 
                     i.component.$on('close', () => {
                         i.$update({
@@ -166,21 +168,24 @@
                     i.component.$on('hook:destroyed', () => {
                         console.log('$emit hook:destroyed')
                     })
+                },
 
+
+                closeAll() {
+                    this.store.forEach(i => {
+                        i.$update({
+                            isShow: false
+                        })
+                    })
                 },
 
                 callSingle() {
                     this.$single({
                         title: '提示',
-                        content: '只能打开一个哦!',
+                        content: '我是单例1, 只能打开一个哦!',
                     });
-
-                    // this.$single({
-                    //     title: '提示123213',
-                    //     content: '只能打开一个哦!',
-                    // });
-                    console.dir(C);
                 },
+
 
                 closeSingle() {
                     this.$single.close()
@@ -192,7 +197,7 @@
                 callSingle1() {
                     this.$single1({
                         title: '提示',
-                        content: '只能打开一个哦!',
+                        content: '我是单例2, 只能打开一个哦!',
                     });
                 },
 
