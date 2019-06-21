@@ -16,7 +16,7 @@
 
 [API](#API)
 
-[更多示例](#更多示例)
+[更多示例](#示例)
 
 
 ## 安装 
@@ -167,7 +167,7 @@ C.$destroy();
 前2个参数同[CreateRootClass.constructor](#函数签名-componentobject-optionsobject-function). 第3个参数同[Vue.createRoot](#vuecreaterootclass)的options, 主要用来控制组件插入位置.
 
 
-## 更多示例
+## 示例
 
 [监听事件(\$on)](#监听事件on)
 
