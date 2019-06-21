@@ -1,5 +1,5 @@
 /*!
- * AnyTouch.js v0.0.2
+ * AnyTouch.js v0.0.3
  * (c) 2019-2019 Russell
  * https://github.com/any86/vue-create-root
  * Released under the MIT License.
@@ -47,7 +47,6 @@ function __spread() {
 function throwError(message) {
     throw ("vue-create-root: " + message);
 }
-//# sourceMappingURL=utils.js.map
 
 var INSERT_POSITION_MAP = {
     append: 'beforeend',
@@ -55,7 +54,6 @@ var INSERT_POSITION_MAP = {
     insertAfter: 'afterend',
     insertBefore: 'beforebegin'
 };
-//# sourceMappingURL=const.js.map
 
 var createRoot = function (Vue, component, data, childrenRender, options) {
     if (options === void 0) { options = {}; }
@@ -90,7 +88,6 @@ var createRoot = function (Vue, component, data, childrenRender, options) {
     rootComponent.$updateRenderData(data, _childrenRender);
     return rootComponent;
 };
-//# sourceMappingURL=createRoot.js.map
 
 var CreateRootClassWrapFunction = (function (Vue, inputComponent, globalcreateRootFnExtendOptions) {
     var _a;
@@ -136,7 +133,6 @@ var CreateRootClassWrapFunction = (function (Vue, inputComponent, globalcreateRo
         },
         _a;
 });
-//# sourceMappingURL=CreateRootClassWrapFunction.js.map
 
 function install(Vue, _a) {
     var _b = (_a === void 0 ? {} : _a).as, as = _b === void 0 ? { $createRoot: '$createRoot' } : _b;
@@ -149,10 +145,9 @@ function install(Vue, _a) {
         }
         createRoot.apply(void 0, __spread([Vue], args));
     };
-    Vue.createRootClass.version = '0.0.2';
+    Vue.createRootClass.version = '0.0.3';
 }
 var main = { install: install };
-//# sourceMappingURL=main.js.map
 
 module.exports = main;
 //# sourceMappingURL=vue-create-root.common.js.map
