@@ -1,7 +1,7 @@
 {
   "name": "vue-create-root",
-  "version": "0.0.2",
-  "description": "做一些通常UI组件库不包含的vue小工具",
+  "version": "0.0.3",
+  "description": "命令式调用组件(<1k),  如this.$createRoot(uComponent).",
   "unpkg": "dist/vue-create-root.umd.js",
   "jsdelivr": "dist/vue-create-root.umd.js",
   "main": "dist/vue-create-root.common.js",
@@ -20,21 +20,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/383514580/vue-other.git"
+    "url": "git+https://github.com/any86/vue-create-root.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/any86//vue-create-root/issues"
+    "url": "https://github.com/any86/vue-create-root/issues"
   },
-  "homepage": "https://github.com/any86//vue-create-root#readme",
+  "homepage": "https://github.com/any86/vue-create-root#readme",
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "gh-pages": "^2.0.1",
     "jest": "^24.8.0",
     "rollup": "^1.14.6",
     "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-alias": "^1.5.2",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.0.1",
     "rollup-plugin-replace": "^2.2.0",
@@ -45,8 +46,5 @@
     "tslib": "^1.9.3",
     "typescript": "^3.5.1",
     "vue": "^2.6.10"
-  },
-  "dependencies": {
-    "rollup-plugin-alias": "^1.5.2"
   }
 }
