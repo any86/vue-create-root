@@ -1,8 +1,8 @@
 // createRoot函数的包装类, 主要用来暴露单例和多例2种接口
 import { VueConstructor, VNodeData } from 'vue';
-import { InputComponent, ChildrenRender, RootComponent } from './interface';
+import { InputComponent, ChildrenRender, RootComponent, createRootFnExtendlOptions } from './interface';
 import createRoot from './createRoot';
-export default (Vue: VueConstructor, inputComponent: InputComponent) => {
+export default (Vue: VueConstructor, inputComponent: InputComponent, createRootFnExtendlOptions: createRootFnExtendlOptions = {}) => {
     type Instance = {
         $update: (options: VNodeData, childrenRender?: ChildrenRender) => void;
         $destroy: () => void;
@@ -46,7 +46,7 @@ export default (Vue: VueConstructor, inputComponent: InputComponent) => {
         component: RootComponent;
 
         constructor(options: VNodeData, childrenRender?: ChildrenRender) {
-            this.component = createRoot(Vue, inputComponent, options, childrenRender, {});
+            this.component = createRoot(Vue, inputComponent, options, childrenRender, createRootFnExtendlOptions);
             return this;
         }
 
