@@ -71,7 +71,7 @@ export default {
         },
         {
             format: 'umd',
-            name: 'VueCreateRoot',
+            name: 'createRoot',
             file: pkg.browser,
             banner,
             sourcemap: true

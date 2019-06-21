@@ -6,10 +6,13 @@ import createRoot from './createRoot';
 // https://cn.vuejs.org/v2/guide/typescript.html#增强类型以配合插件使用
 
 // ========= 声明 =========
+type createRoot = ((component: InputComponent, createRootFnExtendOptions: createRootFnExtendOptions) => void)
+    & { version?: string };
 declare module 'vue' {
     interface VueConstructor {
-        createRootClass: ((component: InputComponent,createRootFnExtendOptions:createRootFnExtendOptions) => void)
-        & { version?: string };
+        createRoot: createRoot;
+
+        createRootClass: createRoot;
     }
 }
 
@@ -19,10 +22,11 @@ declare module 'vue' {
  *  @param {String} Options.prefix 前缀
  *  @param {String} Options.name $createRoot如果冲突可以改名
  */
-function install(Vue: VueConstructor, { name = '$createRoot' } = {}) {
-    Vue.createRootClass = (component,createRootFnExtendOptions) => CreateRootClassWrapFunction(Vue, component,createRootFnExtendOptions);
+function install(Vue: VueConstructor, { as = { $createRoot: '$createRoot' } } = {}) {
+    Vue.createRootClass = (component, createRootFnExtendOptions) => CreateRootClassWrapFunction(Vue, component, createRootFnExtendOptions);
+    Vue.createRoot = Vue.createRootClass;
     // 核心功能
-    Vue.prototype[name] = (...args: Tail<Parameters<createRootFn>>) => {
+    Vue.prototype[as.$createRoot] = (...args: Tail<Parameters<createRootFn>>) => {
         createRoot(Vue, ...args);
     }
 

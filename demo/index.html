@@ -18,7 +18,7 @@
 
     <div id="my"></div>
     <script>
-        Vue.use(VueCreateRoot);
+        Vue.use(createRoot);
 
         const Com = {
             name: 'UCom',
@@ -70,15 +70,13 @@
             },
         };
 
-
-
         // 多例
         const B = Vue.createRootClass(Com);
 
         Vue.prototype.$alert = (props) => new B({
             isShow: true,
             ...props
-        },undefined, {insertPosition:'prepend'});
+        },undefined);
 
         const C = Vue.createRootClass(Com, {insertPosition:'prepend'});
 

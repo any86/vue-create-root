@@ -1,5 +1,5 @@
 // 核心
-// https://cn.vuejs.org/v2/guide/render-function.html#深入数据对象
+// https://cn.vuejs.org/v2/guide/render-function.html#深入-data-对象
 import { VNodeData } from 'vue/types/index';
 import { RootComponent, createRootFn, ChildrenRender } from './interface';
 import { throwError } from './utils';
@@ -25,7 +25,7 @@ const createRoot: createRootFn = (Vue, component, data, childrenRender, options 
         el,
 
         render(createElement) {
-            // https://cn.vuejs.org/v2/guide/render-function.html#深入数据对象
+            // https://cn.vuejs.org/v2/guide/render-function.html#深入-data-对象
             const rootComponent = createElement(component, vNodeData, _childrenRender && _childrenRender(createElement));
             return rootComponent;
         },
