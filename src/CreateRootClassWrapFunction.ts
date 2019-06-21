@@ -1,14 +1,10 @@
-// createRoot函数的包装类, 主要用来暴露单例和多例2种接口
-import { VueConstructor, VNodeData } from 'vue';
-import { InputComponent, ChildrenRender, RootComponent, createRootFnExtendlOptions } from './interface';
+import { VueConstructor, VNodeData } from 'vue/types';
+import { InputComponent, ChildrenRender, RootComponent, createRootFnExtendOptions, CRootInstance } from './interface';
 import createRoot from './createRoot';
-export default (Vue: VueConstructor, inputComponent: InputComponent, createRootFnExtendlOptions: createRootFnExtendlOptions = {}) => {
-    type Instance = {
-        $update: (options: VNodeData, childrenRender?: ChildrenRender) => void;
-        $destroy: () => void;
-        component: RootComponent;
-    };
-    let instance: Instance | null;
+
+// createRoot函数的包装类, 主要用来暴露单例和多例2种接口
+export default (Vue: VueConstructor, inputComponent: InputComponent, globalcreateRootFnExtendOptions?: createRootFnExtendOptions) => {
+    let cRootInstance: CRootInstance | null;
 
     // 从外部接收Vue和inputComponent
     return class CreateRoot {
@@ -16,10 +12,10 @@ export default (Vue: VueConstructor, inputComponent: InputComponent, createRootF
          * 创建单例
          */
         static init = (options: VNodeData, childrenRender?: ChildrenRender) => {
-            if (instance) {
-                instance.$update(options, childrenRender);
+            if (cRootInstance) {
+                cRootInstance.$update(options, childrenRender);
             } else {
-                instance = new CreateRoot(options, childrenRender);
+                cRootInstance = new CreateRoot(options, childrenRender);
             }
         }
 
@@ -27,8 +23,8 @@ export default (Vue: VueConstructor, inputComponent: InputComponent, createRootF
          * 更新单例
          */
         static $update = (options: VNodeData, childrenRender?: ChildrenRender) => {
-            if (undefined !== instance && null !== instance) {
-                instance.$update(options, childrenRender)
+            if (undefined !== cRootInstance && null !== cRootInstance) {
+                cRootInstance.$update(options, childrenRender)
             }
         }
 
@@ -36,9 +32,9 @@ export default (Vue: VueConstructor, inputComponent: InputComponent, createRootF
          * 销毁单例
          */
         static $destroy = () => {
-            if (null !== instance) {
-                instance.$destroy();
-                instance = null;
+            if (null !== cRootInstance) {
+                cRootInstance.$destroy();
+                cRootInstance = null;
             }
         }
 
@@ -46,7 +42,7 @@ export default (Vue: VueConstructor, inputComponent: InputComponent, createRootF
         component: RootComponent;
 
         constructor(options: VNodeData, childrenRender?: ChildrenRender) {
-            this.component = createRoot(Vue, inputComponent, options, childrenRender, createRootFnExtendlOptions);
+            this.component = createRoot(Vue, inputComponent, options, childrenRender, globalcreateRootFnExtendOptions);
             return this;
         }
 

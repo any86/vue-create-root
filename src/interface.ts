@@ -1,5 +1,5 @@
 import Vue, { VueConstructor, Component, VNode, CreateElement, VNodeData, VNodeChildren, ComponentOptions } from 'vue/types/index';
-import {INSERT_POSITION_MAP} from './const';
+import { INSERT_POSITION_MAP } from './const';
 // 可以解析的组件格式
 export type InputComponent = ComponentOptions<Vue>;
 
@@ -14,7 +14,7 @@ type InsertPositionLikeJQ = keyof typeof INSERT_POSITION_MAP;
 
 
 // 扩展选项
-export interface createRootFnExtendlOptions extends Record<string, any> {
+export interface createRootFnExtendOptions extends Record<string, any> {
     // 目标容器元素
     target?: string | Element;
     // 插入位置
@@ -28,7 +28,7 @@ export interface createRootFn {
         component: InputComponent,
         vNodeData: VNodeData | Record<string, any>,
         childrenRender?: (createElement: CreateElement) => VNodeChildren,
-        options?: createRootFnExtendlOptions,
+        options?: createRootFnExtendOptions,
     ): RootComponent;
 }
 
@@ -36,3 +36,10 @@ export interface createRootFn {
 
 // 删除数组中第一个元素
 export type Tail<Tuple extends any[]> = ((...args: Tuple) => void) extends ((a: any, ...args: infer T) => void) ? T : never;
+
+
+export type CRootInstance = {
+    $update: (options: VNodeData, childrenRender?: ChildrenRender) => void;
+    $destroy: () => void;
+    component: RootComponent;
+};
