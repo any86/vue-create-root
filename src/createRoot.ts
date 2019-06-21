@@ -3,9 +3,10 @@
 import { VNodeData } from 'vue/types/index';
 import { RootComponent, createRootFn, ChildrenRender } from './interface';
 import { throwError } from './utils';
+import { INSERT_POSITION_MAP } from './const';
 
 const createRoot: createRootFn = (Vue, component, data, childrenRender, options = {}) => {
-    const { target = 'body', isAppend = true } = options;
+    const { target = 'body', insertPosition = 'append' } = options;
     let vNodeData: VNodeData;
     let _childrenRender: ChildrenRender | undefined = childrenRender;
     // 组件容器
@@ -18,7 +19,7 @@ const createRoot: createRootFn = (Vue, component, data, childrenRender, options 
     const el = document.createElement('div');
     // https://developer.mozilla.org/zh-CN/docs/Web/API/Element/insertAdjacentElement
     // 由于throw被封装, ts没办法正确推断container不为空
-    container!.insertAdjacentElement(isAppend ? 'beforeend' : 'afterbegin', el);
+    container!.insertAdjacentElement(INSERT_POSITION_MAP[insertPosition], el);
 
     const root = new Vue({
         el,

@@ -1,5 +1,5 @@
 import { VueConstructor } from 'vue';
-import { InputComponent, RootComponent, createRootFn, Tail } from './interface';
+import { InputComponent, createRootFnExtendlOptions, createRootFn, Tail } from './interface';
 import CreateRootClassWrapFunction from './CreateRootClassWrapFunction'
 import createRoot from './createRoot';
 // https://www.tslang.cn/docs/handbook/declaration-merging.html (模块扩展章节)
@@ -8,7 +8,7 @@ import createRoot from './createRoot';
 // ========= 声明 =========
 declare module 'vue' {
     interface VueConstructor {
-        createRoot: ((component: InputComponent) => void)
+        createRoot: ((component: InputComponent,createRootFnExtendlOptions:createRootFnExtendlOptions) => void)
         & { version?: string };
     }
 }
@@ -20,7 +20,7 @@ declare module 'vue' {
  *  @param {String} Options.name $createRoot如果冲突可以改名
  */
 function install(Vue: VueConstructor, { name = '$createRoot' } = {}) {
-    Vue.createRoot = (component) => CreateRootClassWrapFunction(Vue, component);
+    Vue.createRoot = (component,createRootFnExtendlOptions) => CreateRootClassWrapFunction(Vue, component,createRootFnExtendlOptions);
     // 核心功能
     Vue.prototype[name] = (...args: Tail<Parameters<createRootFn>>) => {
         createRoot(Vue, ...args);
