@@ -1,5 +1,5 @@
 /*!
- * AnyTouch.js v0.0.3
+ * AnyTouch.js v0.0.2
  * (c) 2019-2019 Russell
  * https://github.com/any86/vue-create-root
  * Released under the MIT License.
@@ -45,6 +45,7 @@ function __spread() {
 function throwError(message) {
     throw ("vue-create-root: " + message);
 }
+//# sourceMappingURL=utils.js.map
 
 var INSERT_POSITION_MAP = {
     append: 'beforeend',
@@ -52,6 +53,7 @@ var INSERT_POSITION_MAP = {
     insertAfter: 'afterend',
     insertBefore: 'beforebegin'
 };
+//# sourceMappingURL=const.js.map
 
 var createRoot = function (Vue, component, data, childrenRender, options) {
     if (options === void 0) { options = {}; }
@@ -77,13 +79,16 @@ var createRoot = function (Vue, component, data, childrenRender, options) {
         container.removeChild(rootComponent.$el);
     });
     rootComponent.$updateRenderData = function (newData, newChildrenRender) {
-        vNodeData = ('props' in newData) ? newData : { props: newData };
+        if (undefined !== newData) {
+            vNodeData = ('props' in newData) ? newData : { props: newData };
+        }
         _childrenRender = newChildrenRender;
         root.$forceUpdate();
     };
     rootComponent.$updateRenderData(data, _childrenRender);
     return rootComponent;
 };
+//# sourceMappingURL=createRoot.js.map
 
 var CreateRootClassWrapFunction = (function (Vue, inputComponent, globalcreateRootFnExtendOptions) {
     var _a;
@@ -129,6 +134,7 @@ var CreateRootClassWrapFunction = (function (Vue, inputComponent, globalcreateRo
         },
         _a;
 });
+//# sourceMappingURL=CreateRootClassWrapFunction.js.map
 
 function install(Vue, _a) {
     var _b = (_a === void 0 ? {} : _a).as, as = _b === void 0 ? { $createRoot: '$createRoot' } : _b;
@@ -141,9 +147,10 @@ function install(Vue, _a) {
         }
         createRoot.apply(void 0, __spread([Vue], args));
     };
-    Vue.createRootClass.version = '0.0.3';
+    Vue.createRootClass.version = '0.0.2';
 }
 var main = { install: install };
+//# sourceMappingURL=main.js.map
 
 export default main;
 //# sourceMappingURL=vue-create-root.es.js.map
