@@ -13,7 +13,9 @@
 
 ## 导航
 [快速开始](#示例)
+
 [API](#API)
+
 [更多示例](#更多示例)
 
 
@@ -116,11 +118,11 @@ D.init({content: 'xxx'});
 **注意**:  再次强调下, Vue.createRootClass并**不生成组件**, 而是返回**生成组件的构造函数**. 
 
 
-#### Vue.createRootClass返回的构造函数有哪些方法?
+### :seedling: CreateRootClass
 
-:seedling: 我给这个返回的构造函数起个名字叫**CreateRootClass**.
+我给Vue.createRootClass返回的构造函数起个名字叫**CreateRootClass**.
 
-##### CreateRootClass.constructor( options:Object, childrenRender:Function )=> this
+#### CreateRootClass.constructor( options:Object, childrenRender:Function )=> this
 
 用来生成组件, 可以指定组件在dom中的位置.
 
@@ -135,22 +137,22 @@ Vue.prototype.$abc = (...args)=> new A(...args, h=>h('p', '我在默认插槽内
 ```
 
 
-##### CreateRootClass.init( options:Object, childrenRender:Function )=> this
+#### CreateRootClass.init( options:Object, childrenRender:Function )=> this
 功能及参数同CreateRootClass.constructor, 但是他渲染出的组件是**单例**模式, 也就是**不论init多少次, 都只会渲染同一个组件**.
 ```javascript
 const C = Vue.createRootClass(UCom);
 Vue.prototype.$abc = (...args)=> C.init(...args, h=>h('p', '我在默认插槽内!'));
 ```
 
-##### CreateRootClass.$update( options:Object, childrenRender:Function )=> this
-更新组件数据, 参数同**CreateRootClass.constructor**.
+#### CreateRootClass.$update( options:Object, childrenRender:Function )=> this
+更新组件数据, 参数同CreateRootClass.constructor.
 ```javascript
 const C = Vue.createRootClass(UCom);
 C.$update({content: '内容更新了'}, h=>h('p', '我在默认插槽内!'));
 ```
 
 
-##### CreateRootClass.$destroy()
+#### CreateRootClass.$destroy()
 销毁组件, 无论是否单例模式都通过$destroy方法销毁.
 ```javascript
 const C = Vue.createRootClass(UCom);
@@ -160,8 +162,8 @@ C.$destroy();
 
 ### $createRoot
 在任意组件内可以通过this.$createRoot渲染组件到任意位置.
-###### $createRoot(data: object, childrenRender: function, options: object)=> object
-前2个参数同**CreateRootClass.constructor**, 第三个参数同**Vue.createRoot**的options, 主要用来控制组件插入位置
+#### $createRoot(data: object, childrenRender: function, options: object)=> object
+前2个参数同[CreateRootClass.constructor](#函数签名-componentobject-optionsobject-function), 第三个参数同[Vue.createRoot](#vuecreaterootclass)的options, 主要用来控制组件插入位置
 
 
 
