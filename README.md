@@ -115,12 +115,13 @@ new B({content: 'xxx'});
 C.init();
 D.init({content: 'xxx'});
 ```
-**注意**:  再次强调下, Vue.createRootClass并**不生成组件**, 而是返回**生成组件的构造函数**, 下面我给他起了个名字叫**CreateRootClass**. 
+**注意**:  再次强调下, Vue.createRootClass并**不生成组件**, 而是返回**生成组件的构造函数**, 下面我给他起了个名字叫:seedling: **CreateRootClass**. 
 
 
 ### :seedling: CreateRootClass
 
-###### 函数签名: CreateRootClass.constructor( options:Object, childrenRender:Function )=> this
+#### CreateRootClass.constructor
+###### 函数签名: ( options:Object, childrenRender:Function )=> this
 
 用来生成组件, 可以指定组件在dom中的位置.
 
@@ -136,7 +137,7 @@ Vue.prototype.$abc = (...args)=> new A(...args, h=>h('p', '我在默认插槽内
 
 
 #### CreateRootClass.init
-###### 函数签名: CreateRootClass.init( options:Object, childrenRender:Function )=> this
+###### 函数签名: ( options:Object, childrenRender:Function )=> this
 功能及参数同CreateRootClass.constructor, 但是他渲染出的组件是**单例**模式, 也就是**不论init多少次, 都只会渲染同一个组件**.
 ```javascript
 const C = Vue.createRootClass(UCom);
@@ -162,8 +163,8 @@ C.$destroy();
 
 ### $createRoot
 在任意组件内可以通过this.$createRoot渲染组件到任意位置.
-###### 函数签名: $createRoot(data: object, childrenRender: function, options: object)=> object
-前2个参数同[CreateRootClass.constructor](#函数签名-componentobject-optionsobject-function), 第三个参数同[Vue.createRoot](#vuecreaterootclass)的options, 主要用来控制组件插入位置.
+###### 函数签名: (data: object, childrenRender: function, options: object)=> object
+前2个参数同[CreateRootClass.constructor](#函数签名-componentobject-optionsobject-function). 第3个参数同[Vue.createRoot](#vuecreaterootclass)的options, 主要用来控制组件插入位置.
 
 
 ## 更多示例
