@@ -73,15 +73,16 @@
 
 
         // 多例
-        const B = Vue.createRoot(Com);
+        const B = Vue.createRootClass(Com);
+
         Vue.prototype.$alert = (props) => new B({
             isShow: true,
             ...props
-        });
+        },undefined, {insertPosition:'prepend'});
 
-        const C = Vue.createRoot(Com);
+        const C = Vue.createRootClass(Com, {insertPosition:'prepend'});
 
-        const E = Vue.createRoot(Com);
+        const E = Vue.createRootClass(Com);
 
         Vue.prototype.$single = (props) => C.init({
             isShow: true,
@@ -122,7 +123,7 @@
             template: `<section class="fix-bottom">
                 <button @click="call">生成对话框</button>
                 <button @click="closeAll" class="danger">关闭所有对话框</button>
-                <button @click="callSingle">单例1</button>
+                <button @click="callSingle">单例1,插入到body的头部</button>
                 <button @click="closeSingle" class="danger">关闭单例1</button>
                 <button @click="callSingle1">单例2</button>
                 <button @click="closeSingle1" class="danger">关闭单例2</button>

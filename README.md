@@ -32,11 +32,9 @@ https://unpkg.com/vue-create-root/dist/vue-create-root.umd.js
 Vue.use(createRoot);
 
 // xxx.vue
-{
-    mounted(){
-        // 此处UCom为任意组件
-        this.$createRoot(UCom);
-    }
+mounted(){
+    // 此处UCom为任意组件
+    this.$createRoot(UCom);
 }
 ```
 
@@ -46,7 +44,7 @@ Vue.use(createRoot);
 Vue.use(createRoot);
 
 // 此处UCom为任意组件
-const C = Vue.createRoot(UCom);
+const C = Vue.createRootClass(UCom);
 
 // 注意此处的new C, 单例模式是C.init
 Vue.prototype.$alert = (...args) => new C(...args);
@@ -130,7 +128,7 @@ this.$alert().$on('show', ()=>{
 ```javascript
 // main.js
 Vue.use(CreateRoot)
-const C = Vue.createRoot(UCom);
+const C = Vue.createRootClass(UCom);
 
 // 注意, 单例模式使用C上的init渲染
 Vue.prototype.$loading = (text)=> C.init({value: text});
@@ -140,14 +138,14 @@ Vue.prototype.$loading = (text)=> C.init({value: text});
 this.$loading({value: '正在加载js'});
 this.$loading({value: '正在加载ts'});
 ```
-**注意**: 看到这您可能发现了**this.$createRoot**生成的实例**不支持单例**,  这是因为设计他的目的仅仅是为了组件内的某一次临时调用, 如需要复请用**Vue.createRoot**在**main.js**中生成.
+**注意**: 看到这您可能发现了**this.$createRoot**生成的实例**不支持单例**,  这是因为设计他的目的仅仅是为了组件内的某一次临时调用, 如需要复请用**Vue.createRootClass**在**main.js**中生成.
 
 ### 渲染插槽内容(childrenRender)
 其实就是vue的render函数, 更多render的用法请看官网: https://cn.vuejs.org/v2/guide/render-function.html#深入-data-对象
 ```javascript
 // main.js
 Vue.use(CreateRoot)
-const B = Vue.createRoot(UCom);
+const B = Vue.createRootClass(UCom);
 
 // 建立$alert
 Vue.prototype.$alert = (...args)=> new B(...args);
@@ -167,7 +165,7 @@ this.$alert({value: '我有2个插槽哦: title和content'}, h=>
 想要类似"饿了么 / iView"那种 this.$Message.success()?
 ```javascript
 // main.js
-const C = Vue.createRoot(UCom);
+const C = Vue.createRootClass(UCom);
 Vue.prototype.$Message = {
     success: new C()
 };
