@@ -63,23 +63,12 @@ this.$alert({content: '你好vue !'});
 
 ### UCom组件
 ``` javascript
-// UCom.vue
 export default {
     name: 'UCom',
-    props: {
-        title: {
-            type: String,
-        },
-        content: {
-            type: String,
-        }
-    },
+    props: { title: { type: String }, content: { type: String } },
     template: `<article>
-                    <h1>{{title}}
-                        <small><slot name="title"></slot></small>
-                    </h1>
-                    <p>{{content}}</p>
-                    <p><slot></slot></p>
+                    <h1>{{title}} - <slot name="title"></slot></h1>
+                    <p>{{content}} - <slot></slot></p>
                 </article>`
 }
 ```
