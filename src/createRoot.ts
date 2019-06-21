@@ -43,7 +43,9 @@ const createRoot: createRootFn = (Vue, component, data, childrenRender, options 
     });
 
     rootComponent.$updateRenderData = (newData, newChildrenRender) => {
-        vNodeData = ('props' in newData) ? newData : { props: newData };
+        if(undefined !== newData) {
+            vNodeData = ('props' in newData) ? newData : { props: newData };
+        }
         _childrenRender = newChildrenRender
         // https://cn.vuejs.org/v2/api/#vm-forceUpdate
         // 注意它仅仅影响实例本身和插入插槽内容的子组件，而不是所有子组件。
