@@ -11,6 +11,15 @@
 
 ![](https://ws1.sinaimg.cn/large/005IQkzXly1g40fdqbmikj30m407udfy.jpg)
 
+## 导航
+[快速开始](#快速开始)
+
+[API](#API)
+
+[更多示例](#示例)
+
+[为什么Vue.createRootClass要返回构造函数, 而不是直接生成组件?](#为什么vuecreaterootclass要返回构造函数-而不是直接生成组件)
+
 ## 安装 
 ```shell
 npm i -S vue-create-root
@@ -21,11 +30,10 @@ npm i -S vue-create-root
 https://unpkg.com/vue-create-root/dist/vue-create-root.umd.js
 ```
 
-
-## 示例
+## 快速开始
 
 ### 默认命令
-初始化后，组件内可以用 **this.$createRoot** 渲染组件.
+初始化后，组件内可以用 **this.$createRoot** 渲染组件. [UCom组件](#ucom组件)
 ```javascript
 
 // main.js中初始化
@@ -37,6 +45,7 @@ mounted(){
     this.$createRoot(UCom);
 }
 ```
+
 
 ### 自定义命令: this.$alert
 ```javascript
@@ -55,28 +64,100 @@ this.$alert({content: '你好vue !'});
 
 ### UCom组件
 ``` javascript
-// UCom.vue
 export default {
     name: 'UCom',
-    props: {
-        title: {
-            type: String,
-        },
-        content: {
-            type: String,
-        }
-    },
+    props: { title: { type: String }, content: { type: String } },
     template: `<article>
-                    <h1>{{title}}
-                        <small><slot name="title"></slot></small>
-                    </h1>
-                    <p>{{content}}</p>
-                    <p><slot></slot></p>
+                    <h1>{{title}} - <slot name="title"></slot></h1>
+                    <p>{{content}} - <slot></slot></p>
                 </article>`
 }
 ```
+## API
 
-## 更多例子
+### Vue.createRootClass
+返回**生成组件的构造函数**, 通过初始化构造函数来渲染组件, 别名**Vue.createRoot** .
+###### 函数签名: (component:Object, options:Object)=> Function
+|名称|数据类型|说明|
+|---|---|---|
+|component|Object|vue组件|
+|options|Object|target: 目标元素,默认'body', <br> insertPosition: 插入位置,包含值:'append' /  'prepend' / 'insertBefore' / 'insertAfter', 默认'append' |
+
+```javascript
+// 默认插入到body尾部
+const A = Vue.createRootClass(UCom);
+
+// 插入到#container元素的头部
+const B = Vue.createRootClass(UCom, {target: '#container', insertPositon: 'prepend'});
+
+// 插入到#container元素的前面
+const C = Vue.createRoot(UCom, {target: '#container', insertPositon: 'insertBefore'});
+
+// 插入到#container元素的后面
+const D = Vue.createRoot(UCom, {target: '#container', insertPositon: 'insertAfter'});
+
+// ABCD都是构造函数
+// 开始渲染组件
+new A();
+new B({content: 'xxx'});
+
+// 以单例模式渲染
+C.init();
+D.init({content: 'xxx'});
+```
+**注意**:  再次强调下, Vue.createRootClass并**不生成组件**, 而是返回**生成组件的构造函数**, 下面我给他起了个名字叫:seedling: **CreateRootClass**. 
+
+
+### :seedling: CreateRootClass
+
+#### CreateRootClass.constructor
+###### 函数签名: ( options:Object, childrenRender:Function )=> this
+
+用来生成组件, 可以指定组件在dom中的位置.
+
+|名称|数据类型|说明|
+|---|---|---|
+|options|Object|vue的VNodeData类型, 如果只包含props的设置, 可以省略props,<br> 如: A({props: {a:1}}) 等价 A({a:1}).
+|childrenRender|Function|就是vue的render函数, 主要用来渲染插槽内的子组件, 具体用法请查看[Vue文档](https://cn.vuejs.org/v2/guide/render-function.html#createElement-%E5%8F%82%E6%95%B0)|
+
+```javascript
+const A = Vue.createRootClass(UCom);
+Vue.prototype.$abc = (...args)=> new A(...args, h=>h('p', '我在默认插槽内!'));
+```
+
+
+#### CreateRootClass.init
+###### 函数签名: ( options:Object, childrenRender:Function )=> this
+功能及参数同CreateRootClass.constructor, 但是他渲染出的组件是**单例**模式, 也就是**不论init多少次, 都只会渲染同一个组件**.
+```javascript
+const C = Vue.createRootClass(UCom);
+Vue.prototype.$abc = (...args)=> C.init(...args, h=>h('p', '我在默认插槽内!'));
+```
+
+#### CreateRootClass.$update
+###### 函数签名: CreateRootClass.$update( options:Object, childrenRender:Function )=> this
+更新组件数据, 参数同CreateRootClass.constructor.
+```javascript
+const C = Vue.createRootClass(UCom);
+C.$update({content: '内容更新了'}, h=>h('p', '我在默认插槽内!'));
+```
+
+
+#### CreateRootClass.$destroy()
+销毁组件, 无论是否单例模式都通过$destroy方法销毁.
+```javascript
+const C = Vue.createRootClass(UCom);
+C.$destroy();
+```
+
+
+### $createRoot
+在任意组件内可以通过this.$createRoot渲染组件到任意位置.
+###### 函数签名: (data: object, childrenRender: function, options: object)=> object
+前2个参数同[CreateRootClass.constructor](#函数签名-componentobject-optionsobject-function). 第3个参数同[Vue.createRoot](#vuecreaterootclass)的options, 主要用来控制组件插入位置.
+
+
+## 示例
 
 [监听事件(\$on)](#监听事件on)
 
@@ -86,9 +167,7 @@ export default {
 
 [渲染插槽内容(childrenRender)](#渲染插槽内容childrenrender)
 
-[参数简化(是否包含props)](#参数简化是否包含props)
-
-[指定渲染位置](#指定渲染位置)
+[$createRoot改名](#createroot改名)
 
 [销毁(\$destroy)](#销毁destroy)
 
@@ -173,34 +252,15 @@ Vue.prototype.$Message = {
 // xxx.vue
 this.$Message.success({value: '你好vue!'});
 ```
-### 参数简化(是否包含props)
-**new C** | **C.init**的第一个(**$createRoot**的第二个)参数支持2种形式, 
 
-**如果**包含**props**字段, 那么传入的就是[VNodeData数据](https://cn.vuejs.org/v2/guide/render-function.html#深入-data-对象), 
-
-**否则**传入的数据会当做props字段, 会自动构造成{props: options}格式;
-
-``` javascript
-// 由于没有props字段, 那么C内部会自动构造VNodeData格式, 也就是{props: {value:1}}
-new C({value:1});
-
-// 反之那么证明您传入的就是一个VNodeData, C内部就会直接使用.
-new C({
-    props:{value:1},
-    on: {click: e=>{}}
-});
-```
-**再次强调**: 第二种方式**支持完整**的[VNodeData类型](https://cn.vuejs.org/v2/guide/render-function.html#深入-data-对象), 因为内部实现就是包装Vue的render函数.
-
-### 指定渲染位置
-默认组件会被插入到body的尾部(`{target: 'body', isAppend: true}`).
-
+### $createRoot改名
+如果嫌名字太长, 可以通过**Vue.use**传入a**s**参数
 ```javascript
-// 插入到id为my元素内部的第一个位置.
-this.$createRoot(UCom, {}, undefined, {target: '#my', isAppend: false});
+// main.js
+Vue.use(createRoot, {as: {$createRoot: '$cRoot'}});
 
-// Vue.createRoot生成的构造函数也可以
-C({content: '我也可以'}, undefined, , {target: '#my', isAppend: false} );
+// xxx.vue
+this.$cRoot(UCom);
 ```
 
 ### 销毁($destroy)
@@ -230,3 +290,15 @@ v.$destroy();
 const xx = this.$createRoot(UCom);
 xx.$destroy();
 ```
+
+
+## 为什么Vue.createRootClass要返回构造函数, 而不是直接生成组件?
+
+1. 在非Vue组件代码内, 比如路由/vuex/接口定义的文件中默认是没有Vue实例的, 也就是不那么容易拿到this, 这时候用一个变量来控制组件会比this.$xxx方便得多.
+
+2. api的命名交给开发者, 更灵活. 比如this.$Message.warn, 这种API我如果封装在我的代码中会增加开发者的学习成本, 而且我做过[调查](https://juejin.im/pin/5d07447de51d456e13da9adc), 大家都会用**Vue.prototype**, 我就没必要多此一举了.
+
+3. 再就是语义更清晰, 可以通过返回的构造函数上的**init**方法和**new**来标记是否单例.
+
+
+[返回顶部](#vue-create-root--------)
