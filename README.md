@@ -62,7 +62,7 @@ Vue.prototype.$alert = (...args) => new C(...args);
 this.$alert({content: '你好vue !'});
 ```
 
-### UCom组件
+###### UCom组件
 ``` javascript
 export default {
     name: 'UCom',
