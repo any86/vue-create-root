@@ -36,30 +36,30 @@ https://unpkg.com/vue-create-root/dist/vue-create-root.umd.js
 初始化后，组件内可以用 **this.$createRoot** 渲染组件. [UCom组件](#ucom组件)
 ```javascript
 
-// main.js中初始化
-Vue.use(createRoot);
+// main.js
+    Vue.use(createRoot);
 
 // xxx.vue
-mounted(){
-    // 此处UCom为任意组件
-    this.$createRoot(UCom);
-}
+    mounted(){
+        // 此处UCom为任意组件
+        this.$createRoot(UCom);
+    }
 ```
 
 
 ### 自定义命令: this.$alert
 ```javascript
-// main.js中初始化
-Vue.use(createRoot);
+// main.js
+    Vue.use(createRoot);
 
-// 此处UCom为任意组件
-const C = Vue.createRootClass(UCom);
+    // 此处UCom为任意组件
+    const C = Vue.createRootClass(UCom);
 
-// 注意此处的new C, 单例模式是C.init
-Vue.prototype.$alert = (...args) => new C(...args);
+    // 注意此处的new C, 单例模式是C.init
+    Vue.prototype.$alert = (...args) => new C(...args);
 
 // xxx.vue
-this.$alert({content: '你好vue !'});
+    this.$alert({content: '你好vue !'});
 ```
 
 ###### UCom组件
