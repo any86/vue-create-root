@@ -49,10 +49,10 @@ https://unpkg.com/vue-create-root/dist/vue-create-root.umd.js
 // main.js
 Vue.use(createRoot);
 
-// 此处UCom为任意组件
+// 此处UCom为任意组件, 用createRootClass包装vue组件
 const C = Vue.createRootClass(UCom);
 
-// 注意此处的new C, 单例模式是C.init
+// 此处的args对应vue的props属性
 Vue.prototype.$xxx = (...args) => new C(...args);
 
 // xxx.vue
