@@ -4,7 +4,7 @@
 [size-url]: https://bundlephobia.com/result?p=vue-create-root
 [npm-image]: https://img.shields.io/npm/v/vue-create-root.svg
 [npm-url]: https://npmjs.org/package/vue-create-root
-[downloads-image]: https://img.shields.io/npm/dm/vue-create-root.svg
+[downloads-image]: https://badgen.net/npm/dt/vue-create-root
 [downloads-url]: https://npmjs.org/package/vue-create-root
 
 :lollipop: 1kb的小工具, 生成this.$xxx驱动你的vue组件., 支持**插入组件到任意dom位置**.
