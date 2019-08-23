@@ -7,7 +7,7 @@
 [downloads-image]: https://badgen.net/npm/dt/vue-create-root
 [downloads-url]: https://npmjs.org/package/vue-create-root
 
-:lollipop: 1kb的小工具, 生成this.$xxx驱动你的vue组件., 支持**插入组件到任意dom位置**.
+:lollipop: 不到1kb的小工具, 生成this.$xxx驱动你的vue组件., 支持**插入组件到任意dom位置**.
 
 ![](https://user-images.githubusercontent.com/8264787/63213406-99901300-c13e-11e9-94e6-839b4125e881.png)
 
