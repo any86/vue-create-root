@@ -27,49 +27,46 @@ https://unpkg.com/vue-create-root/dist/vue-create-root.umd.js
 
 ## 快速开始
 
-### 直接使用: this.\$createRoot
 
-初始化后，组件内可以直接使用 **this.\$createRoot** 渲染**任意组件**. [UCom 组件](#ucom-组件)
-
-```javascript
-
-// main.js
-    Vue.use(createRoot);
-
-// xxx.vue
-    mounted(){
-        // 此处UCom为任意组件
-        this.$createRoot(UCom);
-    }
-```
-
-### 或者, 自定义命令: this.\$xxx
+初始化后，组件内可以直接使用 **this.\$createRoot** 渲染**任意组件**.
 
 ```javascript
 // main.js
 Vue.use(createRoot);
 
-// 此处UCom为任意组件, 用createRootClass包装vue组件
-const C = Vue.createRootClass(UCom);
-
-// 此处的args对应vue的props属性
-Vue.prototype.$xxx = (...args) => new C(...args);
-
 // xxx.vue
-this.$xxx({ content: "你好vue !" });
+import UCom from '../UCom.vue';
+{
+    mounted(){
+        // 默认组件被插入到<body>尾部
+        this.$createRoot(UCom, {props: {value:'hello vue!'}});
+        // 简写
+        this.$createRoot(UCom, {value:'hello vue!'});
+    }
+}
+
 ```
 
-###### UCom 组件
+## 进阶
+
+### 自定义命令: this.\$xxx
+
+#### 初始化
+```javascript
+// main.js
+Vue.use(createRoot);
+
+// 初始化组件为类格式
+const C = Vue.createRootClass(UCom);
+
+// 定义this.$xxx命令
+// props对应组件的props
+Vue.prototype.$xxx = (props) => new C(props);
+```
 
 ```javascript
-export default {
-  name: "UCom",
-  props: { title: { type: String }, content: { type: String } },
-  template: `<article>
-                    <h1>{{title}} - <slot name="title"></slot></h1>
-                    <p>{{content}} - <slot></slot></p>
-                </article>`
-};
+// xxx.vue
+this.$xxx({isShow:true, content: "你好vue !"});
 ```
 
 ## 更多
