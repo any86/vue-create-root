@@ -26,9 +26,7 @@ function install(Vue: VueConstructor, { as = { $createRoot: '$createRoot' } } = 
     Vue.createRootClass = (component, createRootFnExtendOptions) => CreateRootClassWrapFunction(Vue, component, createRootFnExtendOptions);
     Vue.createRoot = Vue.createRootClass;
     // 核心功能
-    Vue.prototype[as.$createRoot] = (...args: Tail<Parameters<createRootFn>>) => {
-        createRoot(Vue, ...args);
-    }
+    Vue.prototype[as.$createRoot] = (...args: Tail<Parameters<createRootFn>>) => createRoot(Vue, ...args);
 
     Vue.createRootClass.version = '__VERSION__';
 }
