@@ -5,7 +5,8 @@ import { RootComponent, createRootFn, ChildrenRender } from './interface';
 import { throwError } from './utils';
 import { INSERT_POSITION_MAP } from './const';
 
-const createRoot: createRootFn = (Vue, component, data, childrenRender, options = {}) => {
+const createRoot: createRootFn = (Vue, componentObject, data, childrenRender, options = {}) => {
+
     const { target = 'body', insertPosition = 'append' } = options;
     let vNodeData: VNodeData;
     let _childrenRender: ChildrenRender | undefined = childrenRender;
@@ -26,8 +27,7 @@ const createRoot: createRootFn = (Vue, component, data, childrenRender, options 
 
         render(createElement) {
             // https://cn.vuejs.org/v2/guide/render-function.html#深入-data-对象
-            const rootComponent = createElement(component, vNodeData, _childrenRender && _childrenRender(createElement));
-            return rootComponent;
+            return createElement(componentObject, vNodeData, _childrenRender && _childrenRender(createElement));
         },
     });
 
@@ -43,7 +43,7 @@ const createRoot: createRootFn = (Vue, component, data, childrenRender, options 
     });
 
     rootComponent.$updateRenderData = (newData, newChildrenRender) => {
-        if(undefined !== newData) {
+        if (undefined !== newData) {
             vNodeData = ('props' in newData) ? newData : { props: newData };
         }
         _childrenRender = newChildrenRender
