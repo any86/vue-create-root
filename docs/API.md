@@ -77,5 +77,5 @@ C.$destroy();
 
 ### $createRoot
 在任意组件内可以通过this.$createRoot渲染组件到任意位置.
-###### 函数签名: (data: object, childrenRender: function, options: object)=> object
+###### 函数签名: (componentObject: object, data: object, childrenRender: function, options: object)=> object
 前2个参数同[CreateRootClass.constructor](#函数签名-componentobject-optionsobject-function). 第3个参数同[Vue.createRoot](#vuecreaterootclass)的options, 主要用来控制组件插入位置.
