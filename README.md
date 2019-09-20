@@ -7,7 +7,7 @@
 [downloads-image]: https://badgen.net/npm/dt/vue-create-root
 [downloads-url]: https://npmjs.org/package/vue-create-root
 
-:lollipop: 不到1kb的小工具, 生成this.$xxx驱动你的vue组件., 支持**插入组件到任意dom位置**.
+:lollipop: 不到1kb的小工具, 生成this.$xxx驱动你的vue组件, 支持**插入组件到任意dom位置**.
 
 ![](https://user-images.githubusercontent.com/8264787/63213406-99901300-c13e-11e9-94e6-839b4125e881.png)
 
@@ -47,26 +47,25 @@ import UCom from '../UCom.vue';
 
 ```
 
-## 进阶
+## 自定义命令: this.\$xxx
+你可以定义任意命令类似**饿了么UI**, 比如`this.$alert` / `this.$Message.success`
 
-### 自定义命令: this.\$xxx
-
-#### 初始化
 ```javascript
 // main.js
+// 初始化插件, 把createRootClass方法挂到Vue上
 Vue.use(createRoot);
 
-// 初始化组件为类格式
+// 包装组件
 const C = Vue.createRootClass(UCom);
 
-// 定义this.$xxx命令
-// props对应组件的props
-Vue.prototype.$xxx = (props) => new C(props);
+// 定义this.$alert命令
+// props对应组件的props属性
+Vue.prototype.$alert = (props) => new C(props);
 ```
 
 ```javascript
 // xxx.vue
-this.$xxx({isShow:true, content: "你好vue !"});
+this.$alert({isShow:true, content: "你好vue !"});
 ```
 
 ## 更多
