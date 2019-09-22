@@ -40,7 +40,7 @@ import UCom from '../UCom.vue';
     mounted(){
         // 默认组件被插入到<body>尾部
         this.$createRoot(UCom, {props: {value:'hello vue!'}});
-        // 简写
+        // 或者简写为:
         this.$createRoot(UCom, {value:'hello vue!'});
     }
 }
