@@ -67,6 +67,7 @@ Vue.prototype.$alert = (props) => new C(props);
 // xxx.vue
 this.$alert({isShow:true, content: "你好vue !"});
 ```
+**注意**: 这里设计`Vue.createRootClass(UCom)`的意图是为了实现单/多例2种API.
 
 ## 更多
 
