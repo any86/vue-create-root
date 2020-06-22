@@ -31,6 +31,7 @@ https://unpkg.com/vue-create-root/dist/vue-create-root.umd.js
 初始化后，组件内可以直接使用 **this.\$createRoot** 渲染**任意组件**.
 
 ```javascript
+import createRoot from 'vue-create-root';
 // main.js
 Vue.use(createRoot);
 

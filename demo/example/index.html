@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/github.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="../dist/vue-create-root.umd.js"></script>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <main id="app">
+
+    </main>
+
+    <div class="bg">
+        <h1>生成对话框代码: </h1>
+        <pre>
+            <code class="javascript">
+                // 多例
+                const B = Vue.createRootClass(Com);
+        
+                Vue.prototype.$alert = (props) => new B({
+                    isShow: true,
+                    ...props
+                }, undefined);
+            </code>
+        </pre>
+
+
+        <h1>单例1,插入到body的头部</h1>
+        <pre>
+            <code class="javascript">
+                const C = Vue.createRootClass(Com, {
+                    insertPosition: 'prepend'
+                });
+        
+                Vue.prototype.$single = (props) => C.init({
+                    isShow: true,
+                    ...props
+                });
+
+                // 关闭按钮逻辑
+                Vue.prototype.$single.close = () => {
+                    C.$update({
+                        isShow: false
+                    })
+                }
+            </code>
+        </pre>
+
+        <h1>单例2,插入到body的尾部</h1>
+        <pre>
+            <code class="javascript">
+                const D = Vue.createRootClass(Com);
+        
+                Vue.prototype.$single = (props) => D.init({
+                    isShow: true,
+                    ...props
+                });
+
+                // 关闭按钮逻辑
+                Vue.prototype.$single.close = () => {
+                    D.$update({
+                        isShow: false
+                    })
+                }
+            </code>
+        </pre>
+
+        
+    </div>
+    <script src="./index.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+    </script>
+</body>
+
+</html>
