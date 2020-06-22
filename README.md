@@ -7,10 +7,12 @@
 [downloads-image]: https://badgen.net/npm/dt/vue-create-root
 [downloads-url]: https://npmjs.org/package/vue-create-root
 
-:lollipop: 不到1kb的小工具, 把vue组件变成this.$xxx命令, 支持**插入组件到任意dom位置**.
+:lollipop: 不到1kb的小工具, 把任意vue组件**插入到任意dom位置**, 默认`<body>`尾部.
 
 ![](https://user-images.githubusercontent.com/8264787/63213406-99901300-c13e-11e9-94e6-839b4125e881.png)
 
+## 实际意义
+把一些"**大尺寸的组件**"放到`<body>`尾部, 防止父元素使用`overflow:hidden`而导致组件显示不全.
 
 
 ## 安装
@@ -26,29 +28,80 @@ https://unpkg.com/vue-create-root/dist/vue-create-root.umd.js
 ```
 
 ## 快速开始
+下面把**Test**组件插入到`<body>`尾部.
 
-
-初始化后，组件内可以直接使用 **this.\$createRoot** 渲染**任意组件**.
-
+### main.js
 ```javascript
 import createRoot from 'vue-create-root';
-// main.js
 Vue.use(createRoot);
-
-// xxx.vue
-import UCom from '../UCom.vue';
-{
-    mounted(){
-        // 默认组件被插入到<body>尾部
-        this.$createRoot(UCom, {props: {value:'hello vue!'}});
-        // 或者简写为:
-        this.$createRoot(UCom, {value:'hello vue!'});
-    }
-}
-
 ```
 
-## 自定义命令: this.\$xxx
+### Test.vue
+```javascript
+export default{
+    props:['value'],
+    template: `<h1>{{value}}</h1>`
+}
+```
+
+### App.vue
+```javascript
+import Test from '../Test.vue';
+export default{
+    mounted(){
+        // 默认组件会被插入到<body>尾部
+        this.$createRoot(Test, {value:'hello vue!'});
+    }
+}
+```
+
+
+
+## API
+
+### $createRoot(tag, data, child,  options)
+第3,4个参数选填, options的默认值为:`{ target = 'body', insertPosition = 'append' }`
+
+**\$createRoot**的核心代码依赖于**Vue.prototype.\$createElement**, 所以`tag, data, child`参数就是`$createElement`的参数, 具体使用方法可以参考[Vue文档](https://cn.vuejs.org/v2/guide/render-function.html#createElement-%E5%8F%82%E6%95%B0)
+
+
+`target`是目标元素的选择器, `insertPosition`有4个值, `append`代表插入到元素(**\<body\>**)尾部, 其他参数:
+- beforebegin: 在该元素本身的前面.
+- afterbegin:只在该元素当中, 在该元素第一个子孩子前面.
+- beforeend:只在该元素当中, 在该元素最后一个子孩子后面.
+- afterend: 在该元素本身的后面.
+
+### 简写
+如果`$createRoot`的第2个参数只传入`props`属性, 那么可以简写:
+```javascript
+this.$createRoot(Test, {value:'hello vue!'});
+// 完整写法
+this.$createRoot(Test, {props:{value:'hello vue!'}});
+```
+
+### 返回值
+`$createRoot(Test)`返回一个vue根实例(非Test实例), VueCreateRoot在根实例上定义了2个方法:`$update`和`$destroy`.
+
+### $update(data,child)
+
+\$update用来更新**Test**组件(传入的组件), `data,child`同`$createRoot`的`data,child`.
+```javascript
+const i = this.$createRoot(Test);
+i.$update({value:'我变了!'});
+```
+
+### $destroy
+$destroy用来销毁`$createRoot`创建的根实例, 如:
+```javascript
+const i = this.$createRoot(Test);
+
+i.$destroy({value:'我变了!'});
+```
+
+
+## 进阶使用
+
+### 自定义`this.$alert`
 你可以定义任意命令类似**饿了么UI**, 比如`this.$alert` / `this.$Message.success`
 
 ```javascript

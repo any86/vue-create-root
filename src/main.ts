@@ -18,15 +18,14 @@ declare module 'vue' {
 
 /**
  * 功能实现
- * @param {VueConstructor} Vue构造函数
- *  @param {String} Options.prefix 前缀
- *  @param {String} Options.name $createRoot如果冲突可以改名
+ * @param Vue Vue构造函数
+ *  @param Options 配置
  */
-function install(Vue: VueConstructor, { as = { $createRoot: '$createRoot' } } = {}) {
+function install(Vue: VueConstructor, { alias = '$createRoot' } = {}) {
     Vue.createRootClass = (component, createRootFnExtendOptions) => CreateRootClassWrapFunction(Vue, component, createRootFnExtendOptions);
     Vue.createRoot = Vue.createRootClass;
     // 核心功能
-    Vue.prototype[as.$createRoot] = (...args: Tail<Parameters<createRootFn>>) => createRoot(Vue, ...args);
+    Vue.prototype[alias] = (...args: Tail<Parameters<createRootFn>>) => createRoot(Vue, ...args);
 
     Vue.createRootClass.version = '__VERSION__';
 }

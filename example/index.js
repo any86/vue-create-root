@@ -37,7 +37,7 @@ const Com = {
                             <small><slot name="title"></slot></small>
                         </h1>
                         <p class="content">{{content}}</p>
-                        <p><slot></slot></p>
+                        <p><slot>我是slot</slot></p>
                     </article>
                 </transition>`,
     methods: {
@@ -112,7 +112,16 @@ const vm = new Vue({
 
     methods: {
         createRoot() {
-            this.$createRoot(Com, {isShow:true});
+            const a = this.$createRoot(Com, {isShow:true}, h=>{
+                return h('h1', [123213123])
+            });
+            console.log(a)
+            // setTimeout(()=>{
+            //     a.isShow = false;
+            //     a.$nextTick(()=>{
+            //         a.$destroy();
+            //     })
+            // },1000)
         },
 
         call() {

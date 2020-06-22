@@ -5,9 +5,7 @@ import { RootComponent, createRootFn, ChildrenRender } from './interface';
 import { throwError } from './utils';
 import { INSERT_POSITION_MAP } from './const';
 
-const createRoot: createRootFn = (Vue, componentObject, data, childrenRender, options = {}) => {
-
-    const { target = 'body', insertPosition = 'append' } = options;
+const createRoot: createRootFn = (Vue, componentObject, data, childrenRender, { target = 'body', insertPosition = 'append' } = {}) => {
     let vNodeData: VNodeData;
     let _childrenRender: ChildrenRender | undefined = childrenRender;
     // 组件容器
@@ -18,8 +16,6 @@ const createRoot: createRootFn = (Vue, componentObject, data, childrenRender, op
 
     // 什么元素都无所谓, 因为render中会重新渲染, 最终该标签会被组件标签替换
     const el = document.createElement('div');
-    // https://developer.mozilla.org/zh-CN/docs/Web/API/Element/insertAdjacentElement
-    // 由于throw被封装, ts没办法正确推断container不为空
     container!.insertAdjacentElement(INSERT_POSITION_MAP[insertPosition], el);
 
     const root = new Vue({
