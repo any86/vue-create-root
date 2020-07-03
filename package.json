@@ -1,6 +1,6 @@
 {
   "name": "vue-create-root",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "命令式调用组件(<1k),  如this.$createRoot(uComponent).",
   "unpkg": "dist/vue-create-root.umd.js",
   "jsdelivr": "dist/vue-create-root.umd.js",
