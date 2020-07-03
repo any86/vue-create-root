@@ -35,9 +35,9 @@ const createRoot: createRootFn = (Vue, componentObject, data, childrenRender, { 
         // https://github.com/vuejs/vue/issues/5187
         root.$destroy();
         // 删除元素
-        if(container.childNodes[0] === rootComponent.$el){
-            container!.removeChild(rootComponent.$el);
-        }
+        // if(container.childNodes[0] === rootComponent.$el){
+        //     container!.removeChild(rootComponent.$el);
+        // }
     });
 
     rootComponent.$updateRenderData = (newData, newChildrenRender) => {
